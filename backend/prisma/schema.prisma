@@ -13,35 +13,72 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model SuperAdmin {
+model SuperAdminLogin {
   id        Int      @id @default(autoincrement())
   name      String
   password  String
   email     String   @unique
+  resources             ResourceList[]
+  superadminInvites     SuperadminToUserInvite[]
 }
 
 model AdminLogin {
-  id        Int      @id @default(autoincrement())
-  name      String   
-  password  String
-  email     String   @unique
+  id                Int      @id @default(autoincrement())
+  name              String   
+  password          String
+  email             String   @unique
+  organizationId    Int
+  organization      OrganizationList @relation(fields: [organizationId], references: [id])
+  adminInvites          AdminToUserInvite[]
 }
 
-model invite {
-  email     String  @unique
+model Invite {
+  id                Int      @id @default(autoincrement())
+  email             String   @unique
+  organizationId    Int
+  organization      OrganizationList @relation(fields: [organizationId], references: [id])
 }
 
-model organization_list {
-  id        Int     @id @default(autoincrement())
-  name      String
+model OrganizationList {
+  id              Int           @id @default(autoincrement())
+  name            String
+  admins          AdminLogin[]
+  invites         Invite[]
+  userGroups      UserGroup[]
+  userPolicies    UserPolicy[]
 }
 
-model user_policy {
-  id        Int     @id @default(autoincrement())
-  policy_name       String  
+model UserPolicy {
+  id                Int      @id @default(autoincrement())
+  policyName        String  
+  organizationId    Int
+  organization      OrganizationList @relation(fields: [organizationId], references: [id])
 }
 
-model user_group {
-  id        Int     @id @default(autoincrement())
-  group_name        String
+model UserGroup {
+  id                Int      @id @default(autoincrement())
+  groupName         String
+  organizationId    Int
+  organization      OrganizationList @relation(fields: [organizationId], references: [id])
+}
+
+model ResourceList {
+  id                Int       @id @default(autoincrement())
+  name              String    
+  superAdminId      Int
+  superAdmin        SuperAdminLogin @relation(fields: [superAdminId], references: [id])
+}
+
+model SuperadminToUserInvite {
+  id                Int       @id @default(autoincrement())
+  email             String    @unique
+  superAdminId      Int
+  superAdmin        SuperAdminLogin @relation(fields: [superAdminId], references: [id])
+}
+
+model AdminToUserInvite {
+  id                Int       @id @default(autoincrement())
+  email             String    @unique
+  adminId           Int
+  admin             AdminLogin @relation(fields: [adminId], references: [id])     
 }
