@@ -82,3 +82,8 @@ model AdminToUserInvite {
   adminId           Int
   admin             AdminLogin @relation(fields: [adminId], references: [id])     
 }
+
+model Roles {
+  id                Int       @id @default(autoincrement())
+  name              String
+}

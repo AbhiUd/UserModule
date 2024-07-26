@@ -81,6 +81,14 @@ CREATE TABLE "AdminToUserInvite" (
     CONSTRAINT "AdminToUserInvite_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "Roles" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+
+    CONSTRAINT "Roles_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "SuperAdminLogin_email_key" ON "SuperAdminLogin"("email");
 
