@@ -26,8 +26,6 @@ const create_invite = async (req, res) => {
                 email,
             }
         });
-
-        console.log(`Invite Created :\n ${inviteEmail}`)
         
         const mailOptions = {
             from: process.env.SEND_EMAILID,
@@ -45,6 +43,8 @@ const create_invite = async (req, res) => {
                 return res.status(200).json({ message: "Invite sent successfully" });
             }
         });
+
+        console.log(`Invite Created :\n ${inviteEmail}`)
 
         return res.status(200).json({inviteEmail})
 
