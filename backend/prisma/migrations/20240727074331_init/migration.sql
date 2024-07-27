@@ -20,6 +20,17 @@ CREATE TABLE "AdminLogin" (
 );
 
 -- CreateTable
+CREATE TABLE "UserLogin" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "organizationId" INTEGER NOT NULL,
+
+    CONSTRAINT "UserLogin_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Invite" (
     "id" SERIAL NOT NULL,
     "email" TEXT NOT NULL,
@@ -96,6 +107,9 @@ CREATE UNIQUE INDEX "SuperAdminLogin_email_key" ON "SuperAdminLogin"("email");
 CREATE UNIQUE INDEX "AdminLogin_email_key" ON "AdminLogin"("email");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "UserLogin_email_key" ON "UserLogin"("email");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Invite_email_key" ON "Invite"("email");
 
 -- CreateIndex
@@ -106,6 +120,9 @@ CREATE UNIQUE INDEX "AdminToUserInvite_email_key" ON "AdminToUserInvite"("email"
 
 -- AddForeignKey
 ALTER TABLE "AdminLogin" ADD CONSTRAINT "AdminLogin_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "OrganizationList"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "UserLogin" ADD CONSTRAINT "UserLogin_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "OrganizationList"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Invite" ADD CONSTRAINT "Invite_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "OrganizationList"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

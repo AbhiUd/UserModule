@@ -32,6 +32,15 @@ model AdminLogin {
   adminInvites          AdminToUserInvite[]
 }
 
+model UserLogin {
+  id                Int      @id @default(autoincrement())
+  name              String   
+  password          String
+  email             String   @unique
+  organizationId    Int
+  organization      OrganizationList @relation(fields: [organizationId], references: [id])
+}
+
 model Invite {
   id                Int      @id @default(autoincrement())
   email             String   @unique
@@ -43,6 +52,7 @@ model OrganizationList {
   id              Int           @id @default(autoincrement())
   name            String
   admins          AdminLogin[]
+  users           UserLogin[]
   invites         Invite[]
   userGroups      UserGroup[]
   userPolicies    UserPolicy[]
