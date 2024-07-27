@@ -20,7 +20,7 @@ model SuperAdminLogin {
   password  String
   email     String   @unique
   resources             ResourceList[]
-  superadminInvites     SuperadminToUserInvite[]
+  superadminInvites     SuperadminToAdminInvite[]
 }
 
 model AdminLogin {
@@ -84,7 +84,7 @@ model ResourceList {
   superAdmin        SuperAdminLogin @relation(fields: [superAdminId], references: [id])
 }
 
-model SuperadminToUserInvite {
+model SuperadminToAdminInvite {
   id                Int       @id @default(autoincrement())
   email             String    @unique
   superAdminId      Int

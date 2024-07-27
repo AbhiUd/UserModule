@@ -80,12 +80,12 @@ CREATE TABLE "ResourceList" (
 );
 
 -- CreateTable
-CREATE TABLE "SuperadminToUserInvite" (
+CREATE TABLE "SuperadminToAdminInvite" (
     "id" SERIAL NOT NULL,
     "email" TEXT NOT NULL,
     "superAdminId" INTEGER NOT NULL,
 
-    CONSTRAINT "SuperadminToUserInvite_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "SuperadminToAdminInvite_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -118,7 +118,7 @@ CREATE UNIQUE INDEX "UserLogin_email_key" ON "UserLogin"("email");
 CREATE UNIQUE INDEX "Invite_email_key" ON "Invite"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "SuperadminToUserInvite_email_key" ON "SuperadminToUserInvite"("email");
+CREATE UNIQUE INDEX "SuperadminToAdminInvite_email_key" ON "SuperadminToAdminInvite"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "AdminToUserInvite_email_key" ON "AdminToUserInvite"("email");
@@ -142,7 +142,7 @@ ALTER TABLE "UserGroup" ADD CONSTRAINT "UserGroup_organizationId_fkey" FOREIGN K
 ALTER TABLE "ResourceList" ADD CONSTRAINT "ResourceList_superAdminId_fkey" FOREIGN KEY ("superAdminId") REFERENCES "SuperAdminLogin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "SuperadminToUserInvite" ADD CONSTRAINT "SuperadminToUserInvite_superAdminId_fkey" FOREIGN KEY ("superAdminId") REFERENCES "SuperAdminLogin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "SuperadminToAdminInvite" ADD CONSTRAINT "SuperadminToAdminInvite_superAdminId_fkey" FOREIGN KEY ("superAdminId") REFERENCES "SuperAdminLogin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "AdminToUserInvite" ADD CONSTRAINT "AdminToUserInvite_adminId_fkey" FOREIGN KEY ("adminId") REFERENCES "AdminLogin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
