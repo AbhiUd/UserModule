@@ -1,7 +1,8 @@
 -- CreateTable
 CREATE TABLE "SuperAdminLogin" (
     "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
+    "fname" TEXT NOT NULL,
+    "lname" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "email" TEXT NOT NULL,
 
@@ -11,7 +12,8 @@ CREATE TABLE "SuperAdminLogin" (
 -- CreateTable
 CREATE TABLE "AdminLogin" (
     "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
+    "fname" TEXT NOT NULL,
+    "lname" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "mobile_number" INTEGER NOT NULL,
@@ -23,7 +25,8 @@ CREATE TABLE "AdminLogin" (
 -- CreateTable
 CREATE TABLE "UserLogin" (
     "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
+    "fname" TEXT NOT NULL,
+    "lname" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "mobile_number" INTEGER NOT NULL,
