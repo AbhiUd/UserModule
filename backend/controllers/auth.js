@@ -11,7 +11,7 @@ const SignUp = async (req,res) => {
     }
     
     try{
-        const Inviteexist = await prisma.Invite.findUnique({
+        const Inviteexist = await prisma.invite.findUnique({
             where: {
                 email: email,
               }
@@ -21,7 +21,7 @@ const SignUp = async (req,res) => {
         }
         
         
-        const user = await prisma.Userlogin.create({
+        const user = await prisma.userLogin.create({
             data: [
                 {
                     fname: fname,
