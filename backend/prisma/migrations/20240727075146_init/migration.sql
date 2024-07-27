@@ -14,6 +14,7 @@ CREATE TABLE "AdminLogin" (
     "name" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "email" TEXT NOT NULL,
+    "mobile_number" INTEGER NOT NULL,
     "organizationId" INTEGER NOT NULL,
 
     CONSTRAINT "AdminLogin_pkey" PRIMARY KEY ("id")
@@ -25,6 +26,7 @@ CREATE TABLE "UserLogin" (
     "name" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "email" TEXT NOT NULL,
+    "mobile_number" INTEGER NOT NULL,
     "organizationId" INTEGER NOT NULL,
 
     CONSTRAINT "UserLogin_pkey" PRIMARY KEY ("id")
