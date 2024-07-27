@@ -15,7 +15,8 @@ datasource db {
 
 model SuperAdminLogin {
   id        Int      @id @default(autoincrement())
-  name      String
+  fname     String
+  lname     String
   password  String
   email     String   @unique
   resources             ResourceList[]
@@ -24,7 +25,8 @@ model SuperAdminLogin {
 
 model AdminLogin {
   id                Int      @id @default(autoincrement())
-  name              String   
+  fname             String
+  lname             String   
   password          String
   email             String   @unique
   mobile_number     Int
@@ -35,7 +37,8 @@ model AdminLogin {
 
 model UserLogin {
   id                Int      @id @default(autoincrement())
-  name              String   
+  fname             String
+  lname             String 
   password          String
   email             String   @unique
   mobile_number     Int
