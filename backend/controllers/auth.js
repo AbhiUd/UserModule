@@ -20,12 +20,25 @@ const SignUp = async (req,res) => {
           return res.status(404).json({message: "Invite Invalid"})
         }
         
-        hashedPassword = bcrypt.hashSync(password)
         
-        
+        const user = await prisma.Userlogin.create({
+            data: [
+                {
+                    fname: fname,
+                    lname:lname,
+                    password: password,
+                    email: email,
+                    mobile_number: phoneno
+                }
+            ]
+        })
+        if(!user){
+            return res.status(400).json("User not created")
+        }
+        return res.status(201).json({ message: "User created successfully", user });
 
     }
     catch(error){
-        
+        return res.status(500).json({ message: "Internal server error", error });
     }
 }
