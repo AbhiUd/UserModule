@@ -52,7 +52,7 @@ model OrganizationList {
   id              Int           @id @default(autoincrement())
   name            String
   admins          AdminLogin[]
-  users           UserLogin[]
+  user           UserLogin[]
   invites         Invite[]
   userGroups      UserGroup[]
   userPolicies    UserPolicy[]
