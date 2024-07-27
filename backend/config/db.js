@@ -10,4 +10,6 @@ const client = new pg.Client({
     database:"UserManagement"
 })
 
-client.connect()
+module.exports = {
+    client
+}
