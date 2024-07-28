@@ -14,16 +14,28 @@ const transporter = nodemailer.createTransport({
 
 
 const create_invite = async (req, res) => {
-    const { email } = req.body;
+    const { email , organizationId} = req.body;
 
     try {
-        if (!email) {
-            return res.status(400).json({ message: "Provide an email id for invite" });
+        if (!email || !organizationId) {
+            return res.status(400).json({ message: "Provide an email id or organizationId for invite" });
         }
+
+        const verify_organization = await prisma.organizationList.findUnique({
+            where : {
+                id : organizationId
+            }
+        })
+
+        if(!verify_organization){
+            return res.status(404).json({ message: "Organization not found." });
+        }
+
 
         const inviteEmail = await prisma.invite.create({        
             data : {
                 email,
+                organizationId : verify_organization.id
             }
         });
         
@@ -34,7 +46,7 @@ const create_invite = async (req, res) => {
             html: '<h1>Welcome</h1><p>This was a test mail</p>'
         };
 
-        transporter.sendMail(mailOptions, function (err, info) {
+        transporter.sendMail(mailOptions, function (err) {
             if (err) {
                 console.log(err);
                 return res.status(500).json({ message: "Failed to send email" });
