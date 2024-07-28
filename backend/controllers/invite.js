@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
 })
 
 
-const create_invite = async (req, res) => {
+const create_invite = async (req, res , next) => {
     const { email , organizationId} = req.body;
 
     try {
@@ -28,6 +28,7 @@ const create_invite = async (req, res) => {
         })
 
         if(!verify_organization){
+            next()
             return res.status(404).json({ message: "Organization not found." });
         }
 
