@@ -97,3 +97,7 @@ async function verify_otp(otp , res){
         console.log(error)
     }
 }
+
+module.exports = {
+    generate_otp
+}
