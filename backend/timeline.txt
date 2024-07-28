@@ -32,4 +32,17 @@ user_group controller : create user group and get all user groups done , referen
 
 user groups routes remaining
 
+otp schema and role schema added 
+
+auth secret key generated 
+
+referenced organization id in invite
+
+email otp verification completed 
+
+utils generate token done 
+
+auth middleware setup 
+
+
 
