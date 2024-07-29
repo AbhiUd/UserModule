@@ -4,6 +4,7 @@ const prisma = new PrismaClient();
 const bcrypt = require("bcryptjs");
 const { generate_otp } = require("./email_otp_verify");
 const { generate_token } = require("../utils/generateToken");
+const {User} = require("../utils/roles")
 
 const SignUp = async (req, res) => {
   const { fname, lname, email, password, phoneno } = req.body;
@@ -80,7 +81,7 @@ const SignIn = async (req, res) => {
     }
 
     user = user.select("-password");
-    user.role = "User"
+    user.role = User
     token = generate_token(user);
 
     if (!token) {
