@@ -2,7 +2,7 @@ const {PrismaClient} = require("@prisma/client")
 const prisma = new PrismaClient()
 
 const create_user_group = async (req,res) => {
-    const {groupName} = req.body
+    const {groupName , organizationId} = req.body
 
     try {
 
@@ -10,9 +10,21 @@ const create_user_group = async (req,res) => {
             return res.status(400).json({message:"Fill the group name"})
         }
 
+        const verify_organization = await prisma.organizationList.findUnique({
+            where : {
+                id : organizationId
+            }
+        })
+
+        if(!verify_organization){
+            next()
+            return res.status(404).json({ message: "Organization not found." });
+        }
+
         const user_group = await prisma.userGroup.create({
             data : {
-                groupName
+                groupName,
+                organizationId : verify_organization.id
             }
         })
 
