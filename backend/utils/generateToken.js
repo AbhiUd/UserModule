@@ -7,7 +7,6 @@ const generate_token = (user) => {
         fname : user.fname,
         lname : user.lname,
         email : user.email,
-        password : user.password,
         mobile_number : user.mobile_number,
         role : user.role
     }

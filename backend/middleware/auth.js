@@ -3,7 +3,7 @@ const {secret} = require("../config/jwtConfig")
 
 
 const auth_middleware = async(req,res) => {
-    const token = req.headers['authorization']
+    const token = req.cookies?.uid
 
     if(!token) {
         return res.status(404).json({message : "Access denied , no token provided"})
