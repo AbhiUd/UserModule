@@ -33,6 +33,8 @@ model AdminLogin {
   organizationId    Int
   organization      OrganizationList @relation(fields: [organizationId], references: [id])
   adminInvites          AdminToUserInvite[]
+  roleId            Int
+  role              Roles @relation(fields : [roleId] , references : [id])
 }
 
 model UserLogin {
@@ -44,6 +46,8 @@ model UserLogin {
   mobile_number     Int
   organizationId    Int
   organization      OrganizationList @relation(fields: [organizationId], references: [id])
+  roleId            Int
+  role              Roles @relation(fields : [roleId] , references : [id])
 }
 
 model Invite {
@@ -101,6 +105,8 @@ model AdminToUserInvite {
 model Roles {
   id                Int       @id @default(autoincrement())
   name              String
+  users             UserLogin[]
+  admins            AdminLogin[]
 }
 
 model otp_schema {

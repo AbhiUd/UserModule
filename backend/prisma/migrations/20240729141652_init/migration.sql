@@ -18,6 +18,7 @@ CREATE TABLE "AdminLogin" (
     "email" TEXT NOT NULL,
     "mobile_number" INTEGER NOT NULL,
     "organizationId" INTEGER NOT NULL,
+    "roleId" INTEGER NOT NULL,
 
     CONSTRAINT "AdminLogin_pkey" PRIMARY KEY ("id")
 );
@@ -31,6 +32,7 @@ CREATE TABLE "UserLogin" (
     "email" TEXT NOT NULL,
     "mobile_number" INTEGER NOT NULL,
     "organizationId" INTEGER NOT NULL,
+    "roleId" INTEGER NOT NULL,
 
     CONSTRAINT "UserLogin_pkey" PRIMARY KEY ("id")
 );
@@ -137,7 +139,13 @@ CREATE UNIQUE INDEX "AdminToUserInvite_email_key" ON "AdminToUserInvite"("email"
 ALTER TABLE "AdminLogin" ADD CONSTRAINT "AdminLogin_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "OrganizationList"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "AdminLogin" ADD CONSTRAINT "AdminLogin_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Roles"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "UserLogin" ADD CONSTRAINT "UserLogin_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "OrganizationList"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "UserLogin" ADD CONSTRAINT "UserLogin_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Roles"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Invite" ADD CONSTRAINT "Invite_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "OrganizationList"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
