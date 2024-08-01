@@ -1,10 +1,22 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-// const jwt = require("jsonwebtoken")
 const bcrypt = require("bcryptjs");
-const { generate_otp } = require("./email_otp_verify");
 const { generate_token } = require("../utils/generateToken");
 const {User} = require("../utils/roles")
+
+const otp_generator = require("otp-generator")
+
+const nodemailer = require("nodemailer")
+require("dotenv").config()
+
+const transporter = nodemailer.createTransport({
+    service : 'gmail',
+    auth : {
+        user : process.env.SEND_EMAILID,
+        pass : process.env.SEND_EMAILID_PASSWORD,
+    }
+})
+
 
 const SignUp = async (req, res) => {
   const { fname, lname, email, password, phoneno } = req.body;
@@ -41,6 +53,36 @@ const SignUp = async (req, res) => {
       return res.status(400).json("User not created");
     }
 
+    const otp = otp_generator.generate(6 , {upperCaseAlphabets : false , specialChars : false})
+
+    const expiresAt = new Date(Date.now()+1*60*1000)
+
+    const save_otp = await prisma.otp_schema.create({
+        data : {
+            email,
+            otp,
+            expiresAt
+        }
+    })
+    
+    const mailOptions = {
+        from: process.env.SEND_EMAILID,
+        to: inviteEmail.email,
+        subject: "Verification Code",
+        html: `<h1>This is the verification code</h1><p>Verification code is : ${otp}`
+    };
+
+    transporter.sendMail(mailOptions, function (err, info) {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({ message: "Failed to send email" });
+        } else {
+            console.log(`Email Sent`);
+            return res.status(200).json({ message: "Invite sent successfully" });
+        }
+    });
+
+    
     if (!generate_otp) {
       await prisma.userLogin.delete({
         where: {
