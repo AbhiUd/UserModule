@@ -6,6 +6,7 @@ const verify_otp = async (req , res) => {
 
     const {input_otp} = req.body
     const {email} = req.params.email
+    const {roleId} = req.params.roleId
 
     try {
         const stored_otp = await prisma.otp_schema.findFirst({
@@ -23,11 +24,20 @@ const verify_otp = async (req , res) => {
                   id: stored_otp.id
                 }
             });
+            if(roleId == 3){
             await prisma.userLogin.delete({
                 where: {
                   email: email,
                 },
               });
+            }
+            else{
+              await prisma.adminLogin.delete({
+                  where: {
+                    email: email,
+                  },
+                });
+              }
             return res.status(400).json({ message: "Expired OTP.(Go back to signup page)" });
         }
         

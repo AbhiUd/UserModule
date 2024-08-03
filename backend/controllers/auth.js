@@ -26,7 +26,7 @@ const SignUp = async (req, res) => {
   }
 
   try {
-    const Inviteexist = await prisma.invite.findUnique({
+    const Inviteexist = await prisma.adminToUserInvite.findUnique({
       where: {
         email: email,
       },
@@ -45,6 +45,8 @@ const SignUp = async (req, res) => {
           password: hashedPassword,
           email: email,
           mobile_number: phoneno,
+          organizationId: Inviteexist.organizationId,
+          roleId: 3
         },
       ],
     });
