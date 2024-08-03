@@ -111,6 +111,7 @@ model Roles {
 
 model otp_schema {
   id                Int       @id @default(autoincrement())
+  email             String
   otp               String
   createdAt         DateTime  @default(now())
   expiresAt         DateTime
