@@ -88,12 +88,12 @@ const AdminSignUp = async (req, res) => {
     }
   
     try {
-      const user = prisma.userLogin.findUnique({
+      const admin = prisma.adminLogin.findUnique({
         where: {
           email: email,
         },
       });
-      if (!user) {
+      if (!admin) {
         return res.status(404).json({ message: "Email Id Incorrect" });
       }
   
@@ -103,8 +103,8 @@ const AdminSignUp = async (req, res) => {
         return res.status(404).json({ message: "Password Incorrect" });
       }
   
-      user = user.select("-password");
-      user.role = Admin
+      admin = admin.select("-password");
+      admin.role = Admin
       token = generate_token(user);
   
       if (!token) {
