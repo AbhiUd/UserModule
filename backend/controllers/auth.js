@@ -83,21 +83,14 @@ const SignUp = async (req, res) => {
     });
 
     
-    if (!generate_otp) {
-      await prisma.userLogin.delete({
-        where: {
-          id: user.id,
-        },
-      });
-
-      return res.status(404).json({ message: "Otp verification unsuccessful" });
-    }
 
     return res.status(201).json({ message: "User created successfully", user });
   } catch (error) {
     return res.status(500).json({ message: "Internal server error", error });
   }
 };
+
+
 
 const SignIn = async (req, res) => {
   const { email, password } = req.body;
