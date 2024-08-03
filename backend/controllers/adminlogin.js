@@ -73,7 +73,7 @@ const AdminSignUp = async (req, res) => {
   
       
   
-      return res.status(201).json({ message: "Admin created successfully", user });
+      return res.status(201).json({ message: "Admin created successfully", admin });
     } catch (error) {
       return res.status(500).json({ message: "Internal server error", error });
     }
