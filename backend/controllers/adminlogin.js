@@ -73,7 +73,7 @@ const AdminSignUp = async (req, res) => {
   
       
   
-      return res.status(201).json({ message: "User created successfully", user });
+      return res.status(201).json({ message: "Admin created successfully", user });
     } catch (error) {
       return res.status(500).json({ message: "Internal server error", error });
     }
@@ -97,7 +97,7 @@ const AdminSignUp = async (req, res) => {
         return res.status(404).json({ message: "Email Id Incorrect" });
       }
   
-      const Ispassword = bcrypt.compareSync(password, user.password);
+      const Ispassword = bcrypt.compareSync(password, admin.password);
   
       if (!Ispassword) {
         return res.status(404).json({ message: "Password Incorrect" });
@@ -105,7 +105,7 @@ const AdminSignUp = async (req, res) => {
   
       admin = admin.select("-password");
       admin.role = Admin
-      token = generate_token(user);
+      token = generate_token(admin);
   
       if (!token) {
         return res.status(400).json({ message: "Token not generated" });
