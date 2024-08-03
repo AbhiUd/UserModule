@@ -86,6 +86,7 @@ CREATE TABLE "SuperadminToAdminInvite" (
     "id" SERIAL NOT NULL,
     "email" TEXT NOT NULL,
     "superAdminId" INTEGER NOT NULL,
+    "organizationId" INTEGER NOT NULL,
 
     CONSTRAINT "SuperadminToAdminInvite_pkey" PRIMARY KEY ("id")
 );
@@ -95,6 +96,7 @@ CREATE TABLE "AdminToUserInvite" (
     "id" SERIAL NOT NULL,
     "email" TEXT NOT NULL,
     "adminId" INTEGER NOT NULL,
+    "organizationId" INTEGER NOT NULL,
 
     CONSTRAINT "AdminToUserInvite_pkey" PRIMARY KEY ("id")
 );
@@ -164,4 +166,10 @@ ALTER TABLE "ResourceList" ADD CONSTRAINT "ResourceList_superAdminId_fkey" FOREI
 ALTER TABLE "SuperadminToAdminInvite" ADD CONSTRAINT "SuperadminToAdminInvite_superAdminId_fkey" FOREIGN KEY ("superAdminId") REFERENCES "SuperAdminLogin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "SuperadminToAdminInvite" ADD CONSTRAINT "SuperadminToAdminInvite_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "OrganizationList"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "AdminToUserInvite" ADD CONSTRAINT "AdminToUserInvite_adminId_fkey" FOREIGN KEY ("adminId") REFERENCES "AdminLogin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "AdminToUserInvite" ADD CONSTRAINT "AdminToUserInvite_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "OrganizationList"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

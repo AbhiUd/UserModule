@@ -65,6 +65,8 @@ model OrganizationList {
   invites         Invite[]
   userGroups      UserGroup[]
   userPolicies    UserPolicy[]
+  superAdmin      SuperadminToAdminInvite[]
+  admin           AdminToUserInvite[]
 }
 
 model UserPolicy {
@@ -93,6 +95,8 @@ model SuperadminToAdminInvite {
   email             String    @unique
   superAdminId      Int
   superAdmin        SuperAdminLogin @relation(fields: [superAdminId], references: [id])
+  organizationId    Int
+  organization      OrganizationList @relation(fields: [organizationId], references: [id])
 }
 
 model AdminToUserInvite {
@@ -100,6 +104,8 @@ model AdminToUserInvite {
   email             String    @unique
   adminId           Int
   admin             AdminLogin @relation(fields: [adminId], references: [id])     
+  organizationId    Int
+  organization      OrganizationList @relation(fields: [organizationId], references: [id])
 }
 
 model Roles {
