@@ -61,3 +61,5 @@ const create_admin_invite = async (req ,res) =>{
     }
 
 }
+
+module.exports = {create_admin_invite}
