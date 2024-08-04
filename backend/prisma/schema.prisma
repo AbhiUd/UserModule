@@ -19,6 +19,7 @@ model SuperAdminLogin {
   lname     String
   password  String
   email     String   @unique
+  phonenumber   Int
   resources             ResourceList[]
   superadminInvites     SuperadminToAdminInvite[]
 }

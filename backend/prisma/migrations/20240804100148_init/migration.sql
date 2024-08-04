@@ -5,6 +5,7 @@ CREATE TABLE "SuperAdminLogin" (
     "lname" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "email" TEXT NOT NULL,
+    "phonenumber" INTEGER NOT NULL,
 
     CONSTRAINT "SuperAdminLogin_pkey" PRIMARY KEY ("id")
 );
