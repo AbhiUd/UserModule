@@ -1,6 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-
+const {Admin} = require("../utils/roles")
 const nodemailer = require("nodemailer")
 require("dotenv").config()
 
@@ -13,30 +13,23 @@ const transporter = nodemailer.createTransport({
 })
 
 
-const create_invite = async (req, res , next) => {
-    const { email , organizationId} = req.body;
+const create_user_invite = async (req, res , next) => {
+    const obj = JSON.parse(req.user)
+    const {email} = req.email
 
+    if(!obj) return res.json({message: "No auth found"})
+    
+    if(obj.role != Admin) return res.json({message: "Only admin can access this page"})
+    
     try {
         if (!email || !organizationId) {
             return res.status(400).json({ message: "Provide an email id or organizationId for invite" });
         }
 
-        const verify_organization = await prisma.organizationList.findUnique({
-            where : {
-                id : organizationId
-            }
-        })
-
-        if(!verify_organization){
-            next()
-            return res.status(404).json({ message: "Organization not found." });
-        }
-
-
-        const inviteEmail = await prisma.invite.create({        
+        const inviteEmail = await prisma.adminToUserInvite.create({        
             data : {
                 email,
-                organizationId : verify_organization.id
+                organizationId : obj.organizationId
             }
         });
         
@@ -67,4 +60,4 @@ const create_invite = async (req, res , next) => {
     }
 };
 
-module.exports = { create_invite };
+module.exports = { create_user_invite };

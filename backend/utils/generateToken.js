@@ -8,6 +8,7 @@ const generate_token = (user) => {
         lname : user.lname,
         email : user.email,
         mobile_number : user.mobile_number,
+        organizationId : user.organizationId,
         role : user.role
     }
 

@@ -1,6 +1,9 @@
 const jwt = require("jsonwebtoken")
 const {secret} = require("../config/jwtConfig")
+const app = require("express")
+const cookieParser = require('cookie-parser');
 
+app.use(cookieParser)
 
 const auth_middleware = async(req,res) => {
     const token = req.cookies?.uid
