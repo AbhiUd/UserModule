@@ -26,7 +26,7 @@ const create_admin_invite = async (req ,res) =>{
             return res.status(400).json({ message: "Provide an email id or organizationId for invite" });
         }
 
-        const inviteEmail = await prisma.adminToUserInvite.create({        
+        const inviteEmail = await prisma.SuperadminToAdminInvite.create({        
             data : {
                 email,
                 organizationId : obj.organizationId
