@@ -27,10 +27,10 @@ const SuperAdminSignUp = async (req, res) => {
       });
   
       if (!Superadmin) {
-        return res.status(400).json("Admin not created");
+        return res.status(400).json("Super admin not created");
       }
       
-      return res.status(201).json({ message: "Admin created successfully", Superadmin });
+      return res.status(201).json({ message: "Super admin created successfully", Superadmin });
     } catch (error) {
       console.log(error)
       return res.status(500).json({ message: "Internal server error", error });
@@ -48,7 +48,7 @@ const SuperAdminLogin = async (req,res) => {
         const Superadmin = await prisma.superAdminLogin.findUnique({
             where: {
               email: email,
-            },
+            }
           });
         if (!Superadmin) {
         return res.status(404).json({ message: "Email Id Incorrect" });
@@ -67,7 +67,6 @@ const SuperAdminLogin = async (req,res) => {
         res.cookie("uid", token);
         console.log(token)
         return res.status(200).json({ message: "Token generated successfully" });
-
     }
     catch(error){
         console.log(error)

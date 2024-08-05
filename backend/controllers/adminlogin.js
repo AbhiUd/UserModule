@@ -16,7 +16,7 @@ const AdminSignUp = async (req, res) => {
       const Inviteexist = await prisma.superadminToAdminInvite.findUnique({
         where: {
           email: email,
-        },
+        }
       });
       if (!Inviteexist) {
         return res.status(404).json({ message: "Invite Invalid" });
@@ -25,7 +25,7 @@ const AdminSignUp = async (req, res) => {
       const hashedPassword = bcrypt.hashSync(password);
   
       const admin = await prisma.adminLogin.create({
-        data: [
+        data: 
           {
             fname: fname,
             lname: lname,
@@ -34,8 +34,7 @@ const AdminSignUp = async (req, res) => {
             mobile_number: phoneno,
             organizationId: Inviteexist.organizationId,
             roleId: 2
-          },
-        ],
+          }
       });
   
       if (!admin) {
@@ -91,7 +90,7 @@ const AdminSignUp = async (req, res) => {
       const admin = prisma.adminLogin.findUnique({
         where: {
           email: email,
-        },
+        }
       });
       if (!admin) {
         return res.status(404).json({ message: "Email Id Incorrect" });
