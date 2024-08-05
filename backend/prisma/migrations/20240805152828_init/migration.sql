@@ -5,7 +5,7 @@ CREATE TABLE "SuperAdminLogin" (
     "lname" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "phonenumber" INTEGER NOT NULL,
+    "phonenumber" TEXT NOT NULL,
 
     CONSTRAINT "SuperAdminLogin_pkey" PRIMARY KEY ("id")
 );
@@ -17,7 +17,7 @@ CREATE TABLE "AdminLogin" (
     "lname" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "mobile_number" INTEGER NOT NULL,
+    "mobile_number" TEXT NOT NULL,
     "organizationId" INTEGER NOT NULL,
     "roleId" INTEGER NOT NULL,
 
@@ -31,7 +31,7 @@ CREATE TABLE "UserLogin" (
     "lname" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "mobile_number" INTEGER NOT NULL,
+    "mobile_number" TEXT NOT NULL,
     "organizationId" INTEGER NOT NULL,
     "roleId" INTEGER NOT NULL,
 
@@ -71,15 +71,6 @@ CREATE TABLE "UserGroup" (
     "organizationId" INTEGER NOT NULL,
 
     CONSTRAINT "UserGroup_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "ResourceList" (
-    "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-    "superAdminId" INTEGER NOT NULL,
-
-    CONSTRAINT "ResourceList_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -159,9 +150,6 @@ ALTER TABLE "UserPolicy" ADD CONSTRAINT "UserPolicy_organizationId_fkey" FOREIGN
 
 -- AddForeignKey
 ALTER TABLE "UserGroup" ADD CONSTRAINT "UserGroup_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "OrganizationList"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "ResourceList" ADD CONSTRAINT "ResourceList_superAdminId_fkey" FOREIGN KEY ("superAdminId") REFERENCES "SuperAdminLogin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "SuperadminToAdminInvite" ADD CONSTRAINT "SuperadminToAdminInvite_superAdminId_fkey" FOREIGN KEY ("superAdminId") REFERENCES "SuperAdminLogin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

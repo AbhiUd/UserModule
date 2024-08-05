@@ -19,8 +19,8 @@ model SuperAdminLogin {
   lname     String
   password  String
   email     String   @unique
-  phonenumber   Int
-  resources             ResourceList[]
+  phonenumber   String
+
   superadminInvites     SuperadminToAdminInvite[]
 }
 
@@ -30,7 +30,7 @@ model AdminLogin {
   lname             String   
   password          String
   email             String   @unique
-  mobile_number     Int
+  mobile_number     String
   organizationId    Int
   organization      OrganizationList @relation(fields: [organizationId], references: [id])
   adminInvites          AdminToUserInvite[]
@@ -44,7 +44,7 @@ model UserLogin {
   lname             String 
   password          String
   email             String   @unique
-  mobile_number     Int
+  mobile_number     String
   organizationId    Int
   organization      OrganizationList @relation(fields: [organizationId], references: [id])
   roleId            Int
@@ -84,12 +84,7 @@ model UserGroup {
   organization      OrganizationList @relation(fields: [organizationId], references: [id])
 }
 
-model ResourceList {
-  id                Int       @id @default(autoincrement())
-  name              String    
-  superAdminId      Int
-  superAdmin        SuperAdminLogin @relation(fields: [superAdminId], references: [id])
-}
+
 
 model SuperadminToAdminInvite {
   id                Int       @id @default(autoincrement())
