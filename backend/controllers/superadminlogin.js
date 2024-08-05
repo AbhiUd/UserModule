@@ -5,9 +5,9 @@ const {SA_generate_token} = require("../utils/generateToken");
 
 
 const SuperAdminSignUp = async (req, res) => {
-    const { fname, lname, email, password, phoneno } = req.body;
+    const { fname, lname, email, password, phonenumber } = req.body;
   
-    if (!fname && !lname && !phoneno && !email && !password) {
+    if (!fname && !lname && !phonenumber && !email && !password) {
       return res.status(400).json({ message: "All fields must be provided." });
     }
   
@@ -16,23 +16,23 @@ const SuperAdminSignUp = async (req, res) => {
       const hashedPassword = bcrypt.hashSync(password);
 
       const Superadmin = await prisma.superAdminLogin.create({
-        data: [
+        data: 
           {
             fname: fname,
             lname: lname,
             password: hashedPassword,
             email: email,
-            mobile_number: phoneno,
+            phonenumber: phonenumber,
           },
-        ],
       });
   
       if (!Superadmin) {
         return res.status(400).json("Admin not created");
       }
       
-      return res.status(201).json({ message: "Admin created successfully", admin });
+      return res.status(201).json({ message: "Admin created successfully", Superadmin });
     } catch (error) {
+      console.log(error)
       return res.status(500).json({ message: "Internal server error", error });
     }
 }
@@ -45,7 +45,7 @@ const SuperAdminLogin = async (req,res) => {
     }
 
     try{
-        const Superadmin = prisma.superAdminLogin.findUnique({
+        const Superadmin = await prisma.superAdminLogin.findUnique({
             where: {
               email: email,
             },
@@ -53,7 +53,7 @@ const SuperAdminLogin = async (req,res) => {
         if (!Superadmin) {
         return res.status(404).json({ message: "Email Id Incorrect" });
         }
-        const Ispassword = bcrypt.compareSync(password, admin.password);
+        const Ispassword = bcrypt.compareSync(password, Superadmin.password);
   
         if (!Ispassword) {
             return res.status(404).json({ message: "Password Incorrect" });
@@ -65,14 +65,17 @@ const SuperAdminLogin = async (req,res) => {
         }
       
         res.cookie("uid", token);
+        console.log(token)
         return res.status(200).json({ message: "Token generated successfully" });
 
     }
     catch(error){
+        console.log(error)
         return res.status(500).json({ message: "Internal server error", error });
     }
 }
 
 module.exports = {
-    SuperAdminLogin
+  SuperAdminSignUp,
+  SuperAdminLogin
 }
