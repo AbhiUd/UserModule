@@ -74,6 +74,15 @@ CREATE TABLE "UserGroup" (
 );
 
 -- CreateTable
+CREATE TABLE "ResourceList" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "superAdminId" INTEGER NOT NULL,
+
+    CONSTRAINT "ResourceList_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "SuperadminToAdminInvite" (
     "id" SERIAL NOT NULL,
     "email" TEXT NOT NULL,
@@ -150,6 +159,9 @@ ALTER TABLE "UserPolicy" ADD CONSTRAINT "UserPolicy_organizationId_fkey" FOREIGN
 
 -- AddForeignKey
 ALTER TABLE "UserGroup" ADD CONSTRAINT "UserGroup_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "OrganizationList"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ResourceList" ADD CONSTRAINT "ResourceList_superAdminId_fkey" FOREIGN KEY ("superAdminId") REFERENCES "SuperAdminLogin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "SuperadminToAdminInvite" ADD CONSTRAINT "SuperadminToAdminInvite_superAdminId_fkey" FOREIGN KEY ("superAdminId") REFERENCES "SuperAdminLogin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
