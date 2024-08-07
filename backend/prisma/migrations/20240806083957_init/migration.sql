@@ -51,6 +51,7 @@ CREATE TABLE "Invite" (
 CREATE TABLE "OrganizationList" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "superadminId" INTEGER NOT NULL,
 
     CONSTRAINT "OrganizationList_pkey" PRIMARY KEY ("id")
 );
@@ -153,6 +154,9 @@ ALTER TABLE "UserLogin" ADD CONSTRAINT "UserLogin_roleId_fkey" FOREIGN KEY ("rol
 
 -- AddForeignKey
 ALTER TABLE "Invite" ADD CONSTRAINT "Invite_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "OrganizationList"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "OrganizationList" ADD CONSTRAINT "OrganizationList_superadminId_fkey" FOREIGN KEY ("superadminId") REFERENCES "SuperAdminLogin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "UserPolicy" ADD CONSTRAINT "UserPolicy_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "OrganizationList"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

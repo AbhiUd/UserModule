@@ -22,6 +22,7 @@ model SuperAdminLogin {
   phonenumber   String
   resources             ResourceList[]
   superadminInvites     SuperadminToAdminInvite[]
+  organizations         OrganizationList[]
 }
 
 model AdminLogin {
@@ -61,6 +62,8 @@ model Invite {
 model OrganizationList {
   id              Int           @id @default(autoincrement())
   name            String
+  superadminId    Int
+  super_admin     SuperAdminLogin     @relation(fields : [superadminId] , references : [id])
   admins          AdminLogin[]
   users           UserLogin[]
   invites         Invite[]
