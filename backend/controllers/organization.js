@@ -4,6 +4,14 @@ const prisma = new PrismaClient()
 const create_organization = async( req, res ) => {
     const {name} = req.body
 
+    const obj = JSON.parse(req.user)
+    if(!obj) return res.json({message: "No auth found"})
+    
+        if(obj.role != Admin) {
+            console.log("You are not an Super Admin")
+            return res.json({message: "Only admin can access this page"})
+        }
+        
     try {
         
         if(!name){
@@ -27,15 +35,17 @@ const create_organization = async( req, res ) => {
 
 
 const getAllOrganizations = async(req,res) => {
-    const SuperAdminId = req.params.SuperAdminId
+    const obj = JSON.parse(req.user)
+
+    if(!obj) return res.json({message: "No auth found"})
+    
+    if(obj.role != Admin) {
+        console.log("You are not an Super Admin")
+        return res.json({message: "Only admin can access this page"})
+    }
+        
 
     try {
-
-        const auth_login = await prisma.superAdminLogin.findFirst(SuperAdminId)
-
-        if(!auth_login){
-            return res.status(404).json({status:"Login Failed",message:"ID not found"})
-        }
         
         const organizations = await prisma.adminLogin.findMany()
 
