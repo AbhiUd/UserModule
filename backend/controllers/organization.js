@@ -11,7 +11,7 @@ const create_organization = async( req, res ) => {
             console.log("You are not an Super Admin")
             return res.json({message: "Only admin can access this page"})
         }
-        
+
     try {
         
         if(!name){
@@ -20,7 +20,8 @@ const create_organization = async( req, res ) => {
 
         const create_organization = new prisma.organizationList.create({
             data: {
-                name
+                name,
+                superadminId: obj.id
             }
         })
 
