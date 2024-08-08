@@ -6,8 +6,7 @@ var cookie = require('cookie');
 const create_organization = async( req, res ) => {
     const {name} = req.body
 
-    // const obj = JSON.parse(req.user)
-    var obj = cookie.parse(req.headers.cookie || '');
+    const obj = JSON.parse(req.user)
 
     if(!obj) return res.json({message: "No auth found"})
     
