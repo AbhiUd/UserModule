@@ -3,6 +3,7 @@ const prisma = new PrismaClient();
 const bcrypt = require("bcryptjs");
 const { generate_token } = require("../utils/generateToken");
 const {Admin} = require("../utils/roles")
+var cookie = require('cookie');
 
 
 const AdminSignUp = async (req, res) => {
@@ -110,7 +111,9 @@ const AdminSignUp = async (req, res) => {
         return res.status(400).json({ message: "Token not generated" });
       }
   
-      res.cookie("uid", token);
+      // res.cookie("uid", token);
+      res.setHeader("uid",token);
+
       return res.status(200).json({ message: "Token generated successfully" });
   
     } catch (error) {

@@ -1,10 +1,14 @@
 const {PrismaClient} = require("@prisma/client")
 const prisma = new PrismaClient()
+var cookie = require('cookie');
+
 
 const create_organization = async( req, res ) => {
     const {name} = req.body
 
-    const obj = JSON.parse(req.user)
+    // const obj = JSON.parse(req.user)
+    var obj = cookie.parse(req.headers.cookie || '');
+
     if(!obj) return res.json({message: "No auth found"})
     
         if(obj.role != Admin) {
