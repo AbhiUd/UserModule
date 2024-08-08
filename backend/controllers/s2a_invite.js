@@ -13,9 +13,9 @@ const transporter = nodemailer.createTransport({
 })
 
 const create_admin_invite = async (req ,res) =>{
-    const obj = JSON.parse(req.user)
-    const organizationId = req.params.organizationId
-    const {email} = req.email
+    const obj = req.user
+    const organization_Id = parseInt(req.params.organizationId)
+    const {email} = req.body
 
     if(!obj) return res.json({message: "No auth found"})
     
@@ -28,8 +28,9 @@ const create_admin_invite = async (req ,res) =>{
 
         const inviteEmail = await prisma.superadminToAdminInvite.create({        
             data : {
-                email,
-                organizationId : obj.organizationId
+                superAdminId : obj.id,
+                email:email,
+                organizationId : organization_Id
             }
         });
         

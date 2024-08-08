@@ -3,11 +3,21 @@ const prisma = new PrismaClient();
 const bcrypt = require("bcryptjs");
 const { generate_token } = require("../utils/generateToken");
 const {Admin} = require("../utils/roles")
-var cookie = require('cookie');
+const otp_generator = require("otp-generator")
+const nodemailer = require("nodemailer")
+// var cookie = require('cookie');
+require("dotenv").config()
 
+const transporter = nodemailer.createTransport({
+    service : 'gmail',
+    auth : {
+        user : process.env.SEND_EMAILID,
+        pass : process.env.SEND_EMAILID_PASSWORD,
+    }
+})
 
 const AdminSignUp = async (req, res) => {
-    const { fname, lname, email, password, phoneno } = req.body;
+    const { fname, lname, email, password, mobile_number } = req.body;
   
     if (!fname && !lname && !phoneno && !email && !password) {
       return res.status(400).json({ message: "All fields must be provided." });
@@ -22,7 +32,7 @@ const AdminSignUp = async (req, res) => {
       if (!Inviteexist) {
         return res.status(404).json({ message: "Invite Invalid" });
       }
-  
+      console.log("Admin invite verify",Inviteexist)
       const hashedPassword = bcrypt.hashSync(password);
   
       const admin = await prisma.adminLogin.create({
@@ -32,7 +42,7 @@ const AdminSignUp = async (req, res) => {
             lname: lname,
             password: hashedPassword,
             email: email,
-            mobile_number: phoneno,
+            mobile_number: mobile_number,
             organizationId: Inviteexist.organizationId,
             roleId: 2
           }
@@ -42,7 +52,7 @@ const AdminSignUp = async (req, res) => {
         return res.status(400).json("Admin not created");
       }
   
-      const otp = otp_generator.generate(6 , {upperCaseAlphabets : false , specialChars : false})
+      const otp = otp_generator.generate(6 , {upperCaseAlphabets : false ,lowerCaseAlphabets:false, specialChars : false})
   
       const expiresAt = new Date(Date.now()+1*60*1000)
   
@@ -56,7 +66,7 @@ const AdminSignUp = async (req, res) => {
       
       const mailOptions = {
           from: process.env.SEND_EMAILID,
-          to: inviteEmail.email,
+          to: email,
           subject: "Verification Code",
           html: `<h1>This is the verification code</h1><p>Verification code is : ${otp}`
       };
@@ -75,6 +85,7 @@ const AdminSignUp = async (req, res) => {
   
       return res.status(201).json({ message: "Admin created successfully", admin });
     } catch (error) {
+      console.log(error)
       return res.status(500).json({ message: "Internal server error", error });
     }
   };

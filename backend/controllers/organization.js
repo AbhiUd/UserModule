@@ -1,16 +1,17 @@
 const {PrismaClient} = require("@prisma/client")
 const prisma = new PrismaClient()
+const {SuperAdmin} = require("../utils/roles")
 var cookie = require('cookie');
 
 
 const create_organization = async( req, res ) => {
     const {name} = req.body
-
-    const obj = JSON.parse(req.user)
+    console.log(req.user)
+    const obj = req.user
 
     if(!obj) return res.json({message: "No auth found"})
     
-        if(obj.role != Admin) {
+        if(obj.role != SuperAdmin) {
             console.log("You are not an Super Admin")
             return res.json({message: "Only admin can access this page"})
         }
@@ -21,15 +22,15 @@ const create_organization = async( req, res ) => {
             return res.status(400).json({message:"Fill the organization name"})
         }
 
-        const create_organization = new prisma.organizationList.create({
+        const create_or = await prisma.organizationList.create({
             data: {
                 name,
                 superadminId: obj.id
             }
         })
 
-        console.log(`Organization created:\n ${create_organization}`)
-        return res.status(200).json({create_organization})
+        console.log(`Organization created:\n ${create_or}`)
+        return res.status(200).json({create_or})
 
     } catch (error) {
         console.log(error)
