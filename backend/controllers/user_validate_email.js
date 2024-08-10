@@ -31,9 +31,9 @@ const validate_email = async(req,res) => {
             return res.status(400).json({ message: "Token not generated" });
         }
       
-        res.setHeader("rid",r_token);
+        res.send(r_token)
         console.log(r_token)
-        
+
         const mailOptions = {
             from: process.env.SEND_EMAILID,
             to: check_email.email,
