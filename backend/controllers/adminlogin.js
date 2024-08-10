@@ -18,7 +18,7 @@ const transporter = nodemailer.createTransport({
 const AdminSignUp = async (req, res) => {
     const { fname, lname, email, password, mobile_number } = req.body;
   
-    if (!fname && !lname && !phoneno && !email && !password) {
+    if (!fname && !lname && !mobile_number && !email && !password) {
       return res.status(400).json({ message: "All fields must be provided." });
     }
   
@@ -98,22 +98,23 @@ const AdminSignUp = async (req, res) => {
     }
   
     try {
-      const admin = prisma.adminLogin.findUnique({
+      const admin = await prisma.adminLogin.findUnique({
         where: {
           email: email,
         }
       });
+      
       if (!admin) {
         return res.status(404).json({ message: "Email Id Incorrect" });
       }
-  
+      // console.log(admin.password,bcrypt.hash(password))
       const Ispassword = bcrypt.compareSync(password, admin.password);
   
       if (!Ispassword) {
         return res.status(404).json({ message: "Password Incorrect" });
       }
   
-      admin = admin.select("-password");
+      // admin = admin.select("-password");
       admin.role = Admin
       token = generate_token(admin);
   
@@ -123,11 +124,12 @@ const AdminSignUp = async (req, res) => {
   
       // res.cookie("uid", token);
       // res.setHeader("uid",token);
+      console.log("Token generated success")
+      console.log(token)
       res.send(token)
-
-      return res.status(200).json({ message: "Token generated successfully" });
   
     } catch (error) {
+      console.log(error)
       return res.status(500).json({ message: "Internal server error", error });
     }
   };
