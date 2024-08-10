@@ -13,6 +13,8 @@ const organization_router = require("./routes/organization");
 const user_grp_router = require("./routes/user_group_routes");
 const validate_email_router = require("./routes/validate_email");
 const forgot_password_router = require("./routes/forgot_password");
+const admin_verify_email = require("./routes/admin_sigin_verify")
+const user_verify_email = require("./routes/user_signin_verify")
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -24,10 +26,12 @@ app.use("/main", u_router);
 app.use("/main", s2a_invite_router);
 app.use("/main", user_grp_router);
 app.use("/main", organization_router);
-app.use("/main/admin_validate", validate_email_router.admin_validate_router);
-app.use("/main/user_validate", validate_email_router.user_validate_router);
-app.use("/main/admin_new_password", forgot_password_router.admin_forgot_router);
-app.use("/main/user_new_password", forgot_password_router.user_forgot_router);
+app.use("/main", validate_email_router.admin_validate_router);
+app.use("/main", validate_email_router.user_validate_router);
+app.use("/main", forgot_password_router.admin_forgot_router);
+app.use("/main", forgot_password_router.user_forgot_router);
+app.use("/main",admin_verify_email)
+app.use("/main",user_verify_email)
 
 // app.get("/getcar", (req, res) => {
 //     res.send(req.cookies);
