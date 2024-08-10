@@ -19,9 +19,9 @@ const transporter = nodemailer.createTransport({
 
 
 const SignUp = async (req, res) => {
-  const { fname, lname, email, password, phoneno } = req.body;
+  const { fname, lname, email, password, mobile_number } = req.body;
 
-  if (!fname && !lname && !phoneno && !email && !password) {
+  if (!fname && !lname && !mobile_number && !email && !password) {
     return res.status(400).json({ message: "All fields must be provided." });
   }
 
@@ -44,7 +44,7 @@ const SignUp = async (req, res) => {
           lname: lname,
           password: hashedPassword,
           email: email,
-          mobile_number: phoneno,
+          mobile_number: mobile_number,
           organizationId: Inviteexist.organizationId,
           roleId: 3
         },
@@ -54,7 +54,7 @@ const SignUp = async (req, res) => {
       return res.status(400).json("User not created");
     }
 
-    const otp = otp_generator.generate(6 , {upperCaseAlphabets : false , specialChars : false})
+    const otp = otp_generator.generate(6 , {upperCaseAlphabets : false , lowerCaseAlphabets : false , specialChars : false})
 
     const expiresAt = new Date(Date.now()+1*60*1000)
 
@@ -68,7 +68,7 @@ const SignUp = async (req, res) => {
     
     const mailOptions = {
         from: process.env.SEND_EMAILID,
-        to: inviteEmail.email,
+        to: email,
         subject: "Verification Code",
         html: `<h1>This is the verification code</h1><p>Verification code is : ${otp}`
     };
@@ -83,10 +83,10 @@ const SignUp = async (req, res) => {
         }
     });
 
-    
-
+  
     return res.status(201).json({ message: "User created successfully", user });
   } catch (error) {
+    console.log(error)
     return res.status(500).json({ message: "Internal server error", error });
   }
 };
@@ -101,7 +101,7 @@ const SignIn = async (req, res) => {
   }
 
   try {
-    const user = prisma.userLogin.findUnique({
+    const user = await prisma.userLogin.findUnique({
       where: {
         email: email,
       },
@@ -116,7 +116,7 @@ const SignIn = async (req, res) => {
       return res.status(404).json({ message: "Password Incorrect" });
     }
 
-    user = user.select("-password");
+    // user = user.select("-password");
     user.role = User
     token = generate_token(user);
 
@@ -124,10 +124,13 @@ const SignIn = async (req, res) => {
       return res.status(400).json({ message: "Token not generated" });
     }
 
-    res.send(token)
-    return res.status(200).json({ message: "Token generated successfully" });
+    console.log("token generated success")
+    console.log(token)
+    return res.send(token)
+    // return res.status(200).json({ message: "Token generated successfully" });
 
   } catch (error) {
+    console.log(error)
     return res.status(500).json({ message: "Internal server error", error });
   }
 };
