@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken")
-const {secret , expiresIn , reset_secret} = require("../config/jwtConfig")
+const {secret , reset_secret} = require("../config/jwtConfig")
 const {SuperAdmin} = require("../utils/roles")
 
 const generate_token = (user) => {
@@ -13,7 +13,7 @@ const generate_token = (user) => {
         role : user.role
     }
 
-    return jwt.sign(JSON.stringify(payload) , secret )
+    return jwt.sign(payload , secret , {expiresIn:'1h'})
 }
 
 const SA_generate_token = (user) => {
@@ -25,7 +25,7 @@ const SA_generate_token = (user) => {
         mobile_number : user.mobile_number,
         role : SuperAdmin
     }
-    return jwt.sign(JSON.stringify(payload) , secret )
+    return jwt.sign(payload , secret , {expiresIn:'1h'})
 }
 
 const reset_token = (user) => {
@@ -33,7 +33,7 @@ const reset_token = (user) => {
         email : user.email
     }
 
-    return jwt.sign(JSON.stringify(payload),reset_secret)
+    return jwt.sign(payload,reset_secret , {expiresIn: 2*60})
 }
 module.exports = {
     generate_token,
