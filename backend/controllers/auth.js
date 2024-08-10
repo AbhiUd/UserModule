@@ -125,7 +125,7 @@ const SignIn = async (req, res) => {
       return res.status(400).json({ message: "Token not generated" });
     }
 
-    res.cookie("uid", token);
+    res.send(token)
     return res.status(200).json({ message: "Token generated successfully" });
 
   } catch (error) {
