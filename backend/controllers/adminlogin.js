@@ -5,7 +5,6 @@ const { generate_token } = require("../utils/generateToken");
 const {Admin} = require("../utils/roles")
 const otp_generator = require("otp-generator")
 const nodemailer = require("nodemailer")
-// var cookie = require('cookie');
 require("dotenv").config()
 
 const transporter = nodemailer.createTransport({
@@ -123,7 +122,8 @@ const AdminSignUp = async (req, res) => {
       }
   
       // res.cookie("uid", token);
-      res.setHeader("uid",token);
+      // res.setHeader("uid",token);
+      res.send(token)
 
       return res.status(200).json({ message: "Token generated successfully" });
   
