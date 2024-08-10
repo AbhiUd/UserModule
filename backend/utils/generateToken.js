@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken")
-const {secret , expiresIn} = require("../config/jwtConfig")
+const {secret , expiresIn , reset_secret} = require("../config/jwtConfig")
 const {SuperAdmin} = require("../utils/roles")
 
 const generate_token = (user) => {
@@ -28,7 +28,15 @@ const SA_generate_token = (user) => {
     return jwt.sign(JSON.stringify(payload) , secret )
 }
 
+const reset_token = (user) => {
+    const payload = {
+        email : user.email
+    }
+
+    return jwt.sign(JSON.stringify(payload),reset_secret)
+}
 module.exports = {
     generate_token,
-    SA_generate_token
+    SA_generate_token,
+    reset_token
 }
