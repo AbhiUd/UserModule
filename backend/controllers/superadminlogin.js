@@ -50,6 +50,7 @@ const SuperAdminLogin = async (req,res) => {
               email: email,
             }
           });
+
         if (!Superadmin) {
         return res.status(404).json({ message: "Email Id Incorrect" });
         }
@@ -63,10 +64,9 @@ const SuperAdminLogin = async (req,res) => {
         if (!token) {
             return res.status(400).json({ message: "Token not generated" });
         }
-      
-        res.send(token)
         console.log(token)
-        return res.status(200).json({ message: "Token generated successfully" });
+        return res.send(token)
+        // return res.status(200).json({ message: "Token generated successfully" });
     }
     catch(error){
         console.log(error)
