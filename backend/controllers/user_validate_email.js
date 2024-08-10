@@ -33,12 +33,11 @@ const validate_email = async(req,res) => {
       
         res.send(r_token)
         console.log(r_token)
-
         const mailOptions = {
             from: process.env.SEND_EMAILID,
             to: check_email.email,
             subject: "Reset Password",
-            html: '<h1>Reset Password</h1><a href="http://localhost:5000/main/reset_password">Reset password</a>'
+            html: '<h1>Click on </h1><a href = "http://localhost:5000/main/user_signIn/reset_password/'+r_token+'">Reset password</a>'
         };
 
         transporter.sendMail(mailOptions, function (err) {
