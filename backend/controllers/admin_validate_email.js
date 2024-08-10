@@ -31,7 +31,7 @@ const validate_email = async(req,res) => {
             return res.status(400).json({ message: "Token not generated" });
         }
       
-        res.send(r_token)
+        
         console.log(r_token)
 
         const mailOptions = {
@@ -50,7 +50,8 @@ const validate_email = async(req,res) => {
                 return res.status(200).json({ message: "Invite sent successfully" });
             }
         });
-
+        return res.send(r_token)
+        // return res.status(200).json({message : "email validation success"})
     } catch (error) {
         console.log(error)
     }
