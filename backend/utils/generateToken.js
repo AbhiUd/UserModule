@@ -13,7 +13,7 @@ const generate_token = (user) => {
         role : user.role
     }
 
-    return jwt.sign(payload , secret , {expiresIn})
+    return jwt.sign(JSON.stringify(payload) , secret )
 }
 
 const SA_generate_token = (user) => {
@@ -25,7 +25,7 @@ const SA_generate_token = (user) => {
         mobile_number : user.mobile_number,
         role : SuperAdmin
     }
-    return jwt.sign(payload , secret )
+    return jwt.sign(JSON.stringify(payload) , secret )
 }
 
 module.exports = {

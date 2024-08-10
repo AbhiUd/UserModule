@@ -29,6 +29,11 @@ app.use("/main/user_validate", validate_email_router.user_validate_router);
 app.use("/main/admin_new_password", forgot_password_router.admin_forgot_router);
 app.use("/main/user_new_password", forgot_password_router.user_forgot_router);
 
+// app.get("/getcar", (req, res) => {
+//     res.send(req.cookies);
+//     console.log(req.cookies)
+//  });
+
 const PORT = 5000;
 
 app.listen(PORT, () => {

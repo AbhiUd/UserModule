@@ -64,7 +64,7 @@ const SuperAdminLogin = async (req,res) => {
             return res.status(400).json({ message: "Token not generated" });
         }
       
-        res.cookie("uid", token);
+        res.setHeader("uid",token);
         console.log(token)
         return res.status(200).json({ message: "Token generated successfully" });
     }

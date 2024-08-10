@@ -10,9 +10,11 @@ const auth_middleware = async(req,res) => {
     }
 
     try {
-        const decoded = jwt.verify(token , secret)
+        console.log("token",d_token)
+        const decoded = jwt.verify(d_token, secret)
         req.user = decoded
-
+        console.log("decoded",decoded)
+        next()
     } catch (error) {
         console.log(error)
     }
