@@ -38,7 +38,7 @@ const SignUp = async (req, res) => {
     const hashedPassword = bcrypt.hashSync(password);
 
     const user = await prisma.userLogin.create({
-      data: [
+      data: 
         {
           fname: fname,
           lname: lname,
@@ -48,7 +48,6 @@ const SignUp = async (req, res) => {
           organizationId: Inviteexist.organizationId,
           roleId: 3
         },
-      ],
     });
 
     if (!user) {
