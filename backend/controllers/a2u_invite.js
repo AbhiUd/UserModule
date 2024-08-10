@@ -14,22 +14,24 @@ const transporter = nodemailer.createTransport({
 
 
 const create_user_invite = async (req, res , next) => {
-    const obj = JSON.parse(req.user)
-    const {email} = req.email
+    const obj = req.user
+    // const organizationId = parseInt(req.params.organizationId)
+    const {email} = req.body
 
     if(!obj) return res.json({message: "No auth found"})
     
     if(obj.role != Admin) return res.json({message: "Only admin can access this page"})
     
     try {
-        if (!email || !organizationId) {
-            return res.status(400).json({ message: "Provide an email id or organizationId for invite" });
+        if (!email ) {
+            return res.status(400).json({ message: "Provide an email id for invite" });
         }
 
         const inviteEmail = await prisma.adminToUserInvite.create({        
             data : {
                 email,
-                organizationId : obj.organizationId
+                organizationId : obj.organizationId,
+                adminId : obj.id
             }
         });
         
