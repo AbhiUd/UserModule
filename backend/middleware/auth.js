@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken")
 const {secret, reset_secret} = require("../config/jwtConfig")
 
-
 const auth_middleware = async(req,res,next) => {
     var token = req.params.token
 
