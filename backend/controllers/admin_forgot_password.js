@@ -4,7 +4,8 @@ const bcryptjs = require("bcryptjs");
 
 const forgot_password = async (req, res) => {
     const { new_password, confirm_password } = req.body
-    const { email } = req.params
+    // const { email } = req.params
+    const obj = req.user
 
     try {
         if (new_password != confirm_password) {
@@ -14,7 +15,7 @@ const forgot_password = async (req, res) => {
         const hash_password = bcryptjs.hashSync(confirm_password);
 
         const update_password = await prisma.adminLogin.update({
-            where: { email: email },
+            where: { email: obj.email },
             data: { password: hash_password }
         })
 
