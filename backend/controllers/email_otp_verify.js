@@ -17,13 +17,14 @@ const verify_otp = async (req , res) => {
                 }
             }
         })
+        console.log(`Stored otp : ${stored_otp}`)
 
         if (!stored_otp) {
-            await prisma.otp_schema.delete({
-                where: {
-                  id: stored_otp.id
-                }
-            });
+            // await prisma.otp_schema.delete({
+            //     where: {
+            //       id: stored_otp.id
+            //     }
+            // });
             if(roleId == 3){
             await prisma.userLogin.delete({
                 where: {
@@ -40,7 +41,8 @@ const verify_otp = async (req , res) => {
               }
             return res.status(400).json({ message: "Expired OTP.(Go back to signup page)" });
         }
-        
+        console.log(input_otp)
+
         if(stored_otp.otp != input_otp){
             return res.status(400).json({message: "Incorrect OTP.(Stay on the same page)"})
         }
