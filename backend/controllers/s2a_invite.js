@@ -2,6 +2,9 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const {SuperAdmin} = require("../utils/roles")
 const nodemailer = require("nodemailer")
+const hbs = require('nodemailer-express-handlebars')
+const path = require('path')
+
 require("dotenv").config()
 
 const transporter = nodemailer.createTransport({
@@ -11,6 +14,17 @@ const transporter = nodemailer.createTransport({
         pass : process.env.SEND_EMAILID_PASSWORD,
     }
 })
+
+const handlebarOptions = {
+    viewEngine: {
+        partialsDir: path.resolve('./templates/'),
+        defaultLayout: false,
+    },
+    viewPath: path.resolve('./templates/'),
+};
+
+transporter.use('compile', hbs(handlebarOptions))
+
 
 const create_admin_invite = async (req ,res) =>{
     const obj = req.user
@@ -34,11 +48,22 @@ const create_admin_invite = async (req ,res) =>{
             }
         });
         
+        const organization = await prisma.organizaionList.findUnique({
+            where:{
+                id: organization_Id
+            }
+        })
+
         const mailOptions = {
             from: process.env.SEND_EMAILID,
+            template: "invite_admin",
             to: inviteEmail.email,
             subject: "Invite to join organization as admin",
-            html: '<h1>Welcome</h1><p>This was a test mail</p>'
+            // html: '<h1>Welcome</h1><p>This was a test mail</p>'
+            context:{
+                organization_name: organization.name,
+                admin_signup_link: "http://localhost:5000/main/admin_signUp"
+            }
         };
 
         transporter.sendMail(mailOptions, function (err) {
