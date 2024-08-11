@@ -37,6 +37,7 @@ model AdminLogin {
   adminInvites          AdminToUserInvite[]
   roleId            Int
   role              Roles @relation(fields : [roleId] , references : [id])
+  resources             ResourceList[]
 }
 
 model UserLogin {
@@ -50,6 +51,9 @@ model UserLogin {
   organization      OrganizationList @relation(fields: [organizationId], references: [id])
   roleId            Int
   role              Roles @relation(fields : [roleId] , references : [id])
+  resources             ResourceList[]
+  usergroupid       Int
+  usergroup         UserGroup @relation(fields : [usergroupid] , references : [id])
 }
 
 model Invite {
@@ -78,6 +82,13 @@ model UserPolicy {
   policyName        String  
   organizationId    Int
   organization      OrganizationList @relation(fields: [organizationId], references: [id])
+  usergroupid       Int
+  user_group        UserGroup @relation(fields : [usergroupid] , references : [id])
+  resourceid        Int
+  resource          ResourceList @relation(fields : [resourceid] , references : [id])
+  read_op           Boolean
+  write_op          Boolean
+  delete_op         Boolean
 }
 
 model UserGroup {
@@ -85,13 +96,21 @@ model UserGroup {
   groupName         String
   organizationId    Int
   organization      OrganizationList @relation(fields: [organizationId], references: [id])
+  user_policy        UserPolicy[]
+  users             UserLogin[]
 }
 
 model ResourceList {
   id                Int       @id @default(autoincrement())
   name              String    
+  author_name       String
   superAdminId      Int
   superAdmin        SuperAdminLogin @relation(fields: [superAdminId], references: [id])
+  AdminId           Int
+  Admin             AdminLogin @relation(fields: [AdminId], references: [id])
+  UserId            Int
+  User              UserLogin @relation(fields: [UserId], references: [id])
+  user_policy       UserPolicy[]
 }
 
 model SuperadminToAdminInvite {

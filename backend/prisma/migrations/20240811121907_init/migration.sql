@@ -34,6 +34,7 @@ CREATE TABLE "UserLogin" (
     "mobile_number" TEXT NOT NULL,
     "organizationId" INTEGER NOT NULL,
     "roleId" INTEGER NOT NULL,
+    "usergroupid" INTEGER NOT NULL,
 
     CONSTRAINT "UserLogin_pkey" PRIMARY KEY ("id")
 );
@@ -61,6 +62,11 @@ CREATE TABLE "UserPolicy" (
     "id" SERIAL NOT NULL,
     "policyName" TEXT NOT NULL,
     "organizationId" INTEGER NOT NULL,
+    "usergroupid" INTEGER NOT NULL,
+    "resourceid" INTEGER NOT NULL,
+    "read_op" BOOLEAN NOT NULL,
+    "write_op" BOOLEAN NOT NULL,
+    "delete_op" BOOLEAN NOT NULL,
 
     CONSTRAINT "UserPolicy_pkey" PRIMARY KEY ("id")
 );
@@ -78,7 +84,10 @@ CREATE TABLE "UserGroup" (
 CREATE TABLE "ResourceList" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "author_name" TEXT NOT NULL,
     "superAdminId" INTEGER NOT NULL,
+    "AdminId" INTEGER NOT NULL,
+    "UserId" INTEGER NOT NULL,
 
     CONSTRAINT "ResourceList_pkey" PRIMARY KEY ("id")
 );
@@ -153,6 +162,9 @@ ALTER TABLE "UserLogin" ADD CONSTRAINT "UserLogin_organizationId_fkey" FOREIGN K
 ALTER TABLE "UserLogin" ADD CONSTRAINT "UserLogin_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Roles"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "UserLogin" ADD CONSTRAINT "UserLogin_usergroupid_fkey" FOREIGN KEY ("usergroupid") REFERENCES "UserGroup"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Invite" ADD CONSTRAINT "Invite_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "OrganizationList"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -162,10 +174,22 @@ ALTER TABLE "OrganizationList" ADD CONSTRAINT "OrganizationList_superadminId_fke
 ALTER TABLE "UserPolicy" ADD CONSTRAINT "UserPolicy_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "OrganizationList"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "UserPolicy" ADD CONSTRAINT "UserPolicy_usergroupid_fkey" FOREIGN KEY ("usergroupid") REFERENCES "UserGroup"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "UserPolicy" ADD CONSTRAINT "UserPolicy_resourceid_fkey" FOREIGN KEY ("resourceid") REFERENCES "ResourceList"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "UserGroup" ADD CONSTRAINT "UserGroup_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "OrganizationList"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ResourceList" ADD CONSTRAINT "ResourceList_superAdminId_fkey" FOREIGN KEY ("superAdminId") REFERENCES "SuperAdminLogin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ResourceList" ADD CONSTRAINT "ResourceList_AdminId_fkey" FOREIGN KEY ("AdminId") REFERENCES "AdminLogin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ResourceList" ADD CONSTRAINT "ResourceList_UserId_fkey" FOREIGN KEY ("UserId") REFERENCES "UserLogin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "SuperadminToAdminInvite" ADD CONSTRAINT "SuperadminToAdminInvite_superAdminId_fkey" FOREIGN KEY ("superAdminId") REFERENCES "SuperAdminLogin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
