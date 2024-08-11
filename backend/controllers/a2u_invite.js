@@ -2,6 +2,9 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const {Admin} = require("../utils/roles")
 const nodemailer = require("nodemailer")
+const hbs = require('nodemailer-express-handlebars')
+const path = require('path')
+
 require("dotenv").config()
 
 const transporter = nodemailer.createTransport({
@@ -12,6 +15,15 @@ const transporter = nodemailer.createTransport({
     }
 })
 
+const handlebarOptions = {
+    viewEngine: {
+        partialsDir: path.resolve('./templates/'),
+        defaultLayout: false,
+    },
+    viewPath: path.resolve('./templates/'),
+};
+
+transporter.use('compile', hbs(handlebarOptions))
 
 const create_user_invite = async (req, res , next) => {
     const obj = req.user
@@ -34,12 +46,22 @@ const create_user_invite = async (req, res , next) => {
                 adminId : obj.id
             }
         });
+
+        const organization = await prisma.organizationList.findUnique({
+            where: {
+                id: obj.organizationId
+            }
+        });
         
         const mailOptions = {
             from: process.env.SEND_EMAILID,
+            template: "invite_user",
             to: inviteEmail.email,
-            subject: "Invite to join organization",
-            html: '<h1>Welcome</h1><p>This was a test mail</p>'
+            subject: "Invite to join organization as User",
+            context: {
+                organization_name: organization.name,
+                admin_signup_link: "http://localhost:5000/main/user_signUp"
+            }
         };
 
         transporter.sendMail(mailOptions, function (err) {
@@ -48,13 +70,11 @@ const create_user_invite = async (req, res , next) => {
                 return res.status(500).json({ message: "Failed to send email" });
             } else {
                 console.log(`Email Sent`);
-                return res.status(200).json({ message: "Invite sent successfully" });
+                return res.status(200).json({ message: "Invite sent successfully", inviteEmail });
             }
         });
 
         console.log(`Invite Created :\n ${inviteEmail}`)
-
-        return res.status(200).json({inviteEmail})
 
     } catch (error) {
         console.log(error);
