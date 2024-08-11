@@ -26,41 +26,40 @@ const handlebarOptions = {
 transporter.use('compile', hbs(handlebarOptions))
 
 
-const create_admin_invite = async (req ,res) =>{
-    const obj = req.user
-    const organization_Id = parseInt(req.params.organizationId)
-    const {email} = req.body
+const create_admin_invite = async (req ,res) => {
+    const obj = req.user;
+    const organization_Id = parseInt(req.params.organizationId);
+    const { email } = req.body;
 
-    if(!obj) return res.json({message: "No auth found"})
+    if(!obj) return res.json({message: "No auth found"});
     
-    if(obj.role != SuperAdmin) return res.json({message: "Restricted only for Super Admins"})
+    if(obj.role != SuperAdmin) return res.json({message: "Restricted only for Super Admins"});
 
-    try{
-        if (!email ) {
+    try {
+        if (!email) {
             return res.status(400).json({ message: "Provide an email id or organizationId for invite" });
         }
 
         const inviteEmail = await prisma.superadminToAdminInvite.create({        
-            data : {
-                superAdminId : obj.id,
-                email:email,
-                organizationId : organization_Id
+            data: {
+                superAdminId: obj.id,
+                email: email,
+                organizationId: organization_Id
             }
         });
         
-        const organization = await prisma.organizaionList.findUnique({
-            where:{
+        const organization = await prisma.organizationList.findUnique({
+            where: {
                 id: organization_Id
             }
-        })
+        });
 
         const mailOptions = {
             from: process.env.SEND_EMAILID,
             template: "invite_admin",
             to: inviteEmail.email,
             subject: "Invite to join organization as admin",
-            // html: '<h1>Welcome</h1><p>This was a test mail</p>'
-            context:{
+            context: {
                 organization_name: organization.name,
                 admin_signup_link: "http://localhost:5000/main/admin_signUp"
             }
@@ -72,20 +71,15 @@ const create_admin_invite = async (req ,res) =>{
                 return res.status(500).json({ message: "Failed to send email" });
             } else {
                 console.log(`Email Sent`);
-                return res.status(200).json({ message: "Invite sent successfully" });
+                return res.status(200).json({ message: "Invite sent successfully", inviteEmail });
             }
         });
 
-        console.log(`Invite Created :\n ${inviteEmail}`)
-
-        return res.status(200).json({inviteEmail})
-
-    }
-    catch(error){
+    } catch(error) {
         console.log(error);
         return res.status(500).json({ message: "Internal server error" });
     }
-
 }
+
 
 module.exports = {create_admin_invite}
