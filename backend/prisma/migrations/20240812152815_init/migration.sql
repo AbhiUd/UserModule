@@ -88,6 +88,7 @@ CREATE TABLE "ResourceList" (
     "superAdminId" INTEGER NOT NULL,
     "AdminId" INTEGER NOT NULL,
     "UserId" INTEGER NOT NULL,
+    "organizationId" INTEGER NOT NULL,
 
     CONSTRAINT "ResourceList_pkey" PRIMARY KEY ("id")
 );
@@ -190,6 +191,9 @@ ALTER TABLE "ResourceList" ADD CONSTRAINT "ResourceList_AdminId_fkey" FOREIGN KE
 
 -- AddForeignKey
 ALTER TABLE "ResourceList" ADD CONSTRAINT "ResourceList_UserId_fkey" FOREIGN KEY ("UserId") REFERENCES "UserLogin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ResourceList" ADD CONSTRAINT "ResourceList_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "OrganizationList"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "SuperadminToAdminInvite" ADD CONSTRAINT "SuperadminToAdminInvite_superAdminId_fkey" FOREIGN KEY ("superAdminId") REFERENCES "SuperAdminLogin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

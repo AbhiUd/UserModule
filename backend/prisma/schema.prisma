@@ -75,6 +75,7 @@ model OrganizationList {
   userPolicies    UserPolicy[]
   superAdmin      SuperadminToAdminInvite[]
   admin           AdminToUserInvite[]
+  resources       ResourceList[]
 }
 
 model UserPolicy {
@@ -110,6 +111,8 @@ model ResourceList {
   Admin             AdminLogin @relation(fields: [AdminId], references: [id])
   UserId            Int
   User              UserLogin @relation(fields: [UserId], references: [id])
+  organizationId    Int
+  organization      OrganizationList @relation(fields: [organizationId], references: [id])
   user_policy       UserPolicy[]
 }
 
