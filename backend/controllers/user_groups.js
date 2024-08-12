@@ -1,8 +1,14 @@
 const {PrismaClient} = require("@prisma/client")
 const prisma = new PrismaClient()
+const {Admin} = require("../utils/roles")
 
 const create_user_group = async (req,res) => {
-    const {groupName , organizationId} = req.body
+    const {groupName} = req.body
+    const obj = req.user
+
+    if(!obj) return res.json({message: "No auth found"})
+    
+    if(obj.role != Admin) return res.json({message: "Only admin can access this page"})
 
     try {
 
@@ -12,12 +18,11 @@ const create_user_group = async (req,res) => {
 
         const verify_organization = await prisma.organizationList.findUnique({
             where : {
-                id : organizationId
+                id : obj.organizationId
             }
         })
 
         if(!verify_organization){
-            next()
             return res.status(404).json({ message: "Organization not found." });
         }
 
@@ -42,17 +47,14 @@ const create_user_group = async (req,res) => {
 
 const getAllUserGroups = async (req,res) =>{
 
-    const AdminId = req.params.AdminId
-    const SuperAdminId = req.params.SuperAdminId
+    const obj = req.user
+
+    if(!obj) return res.json({message: "No auth found"})
+    
+    if(obj.role != Admin) return res.json({message: "Only admin can access this page"})
+
 
     try {
-        const s_auth_login = await prisma.superAdminLogin.findFirst(SuperAdminId)
-        const a_auth_login = await prisma.adminLogin.findFirst(AdminId)
-
-        if(!s_auth_login || a_auth_login){
-            return res.status(404).json({status:"Login Failed",message:"ID not found"})
-        }
-
         const user_groups = await prisma.userGroup.findMany()
 
         if(!user_groups.length()){
