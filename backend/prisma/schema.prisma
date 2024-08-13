@@ -75,6 +75,7 @@ model OrganizationList {
   superAdmin      SuperadminToAdminInvite[]
   admin           AdminToUserInvite[]
   resources       ResourceList[]
+  res_map         resource_ug_map[]
 }
 
 model UserGroup {
@@ -141,5 +142,7 @@ model resource_ug_map {
   ug_id              Int
   user_groups        UserGroup  @relation(fields : [ug_id] , references : [id])
   read_op           Boolean
-  edit_op          Boolean
+  edit_op           Boolean
+  organizationId    Int
+  organization      OrganizationList @relation(fields: [organizationId], references: [id])
 }

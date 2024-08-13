@@ -125,6 +125,7 @@ CREATE TABLE "resource_ug_map" (
     "ug_id" INTEGER NOT NULL,
     "read_op" BOOLEAN NOT NULL,
     "edit_op" BOOLEAN NOT NULL,
+    "organizationId" INTEGER NOT NULL,
 
     CONSTRAINT "resource_ug_map_pkey" PRIMARY KEY ("id")
 );
@@ -200,3 +201,6 @@ ALTER TABLE "resource_ug_map" ADD CONSTRAINT "resource_ug_map_resource_id_fkey" 
 
 -- AddForeignKey
 ALTER TABLE "resource_ug_map" ADD CONSTRAINT "resource_ug_map_ug_id_fkey" FOREIGN KEY ("ug_id") REFERENCES "UserGroup"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "resource_ug_map" ADD CONSTRAINT "resource_ug_map_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "OrganizationList"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
