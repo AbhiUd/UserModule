@@ -99,6 +99,7 @@ model UserGroup {
   organization      OrganizationList @relation(fields: [organizationId], references: [id])
   user_policy        UserPolicy[]
   users             UserLogin[]
+  ug_map            resource_ug_map[]
 }
 
 model ResourceList {
@@ -114,6 +115,7 @@ model ResourceList {
   organizationId    Int
   organization      OrganizationList @relation(fields: [organizationId], references: [id])
   user_policy       UserPolicy[]
+  res_map           resource_ug_map[]
 }
 
 model SuperadminToAdminInvite {
@@ -147,4 +149,12 @@ model otp_schema {
   otp               String
   createdAt         DateTime  @default(now())
   expiresAt         DateTime
+}
+
+model resource_ug_map {
+  id                 Int       @id @default(autoincrement())
+  resource_id        Int
+  resources          ResourceList @relation(fields : [resource_id] , references : [id]) 
+  ug_id              Int
+  user_groups        UserGroup  @relation(fields : [ug_id] , references : [id])
 }

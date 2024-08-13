@@ -132,6 +132,15 @@ CREATE TABLE "otp_schema" (
     CONSTRAINT "otp_schema_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "resource_ug_map" (
+    "id" SERIAL NOT NULL,
+    "resource_id" INTEGER NOT NULL,
+    "ug_id" INTEGER NOT NULL,
+
+    CONSTRAINT "resource_ug_map_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "SuperAdminLogin_email_key" ON "SuperAdminLogin"("email");
 
@@ -206,3 +215,9 @@ ALTER TABLE "AdminToUserInvite" ADD CONSTRAINT "AdminToUserInvite_adminId_fkey" 
 
 -- AddForeignKey
 ALTER TABLE "AdminToUserInvite" ADD CONSTRAINT "AdminToUserInvite_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "OrganizationList"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "resource_ug_map" ADD CONSTRAINT "resource_ug_map_resource_id_fkey" FOREIGN KEY ("resource_id") REFERENCES "ResourceList"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "resource_ug_map" ADD CONSTRAINT "resource_ug_map_ug_id_fkey" FOREIGN KEY ("ug_id") REFERENCES "UserGroup"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
