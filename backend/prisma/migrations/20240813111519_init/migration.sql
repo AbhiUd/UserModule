@@ -58,20 +58,6 @@ CREATE TABLE "OrganizationList" (
 );
 
 -- CreateTable
-CREATE TABLE "UserPolicy" (
-    "id" SERIAL NOT NULL,
-    "policyName" TEXT NOT NULL,
-    "organizationId" INTEGER NOT NULL,
-    "usergroupid" INTEGER NOT NULL,
-    "resourceid" INTEGER NOT NULL,
-    "read_op" BOOLEAN NOT NULL,
-    "write_op" BOOLEAN NOT NULL,
-    "delete_op" BOOLEAN NOT NULL,
-
-    CONSTRAINT "UserPolicy_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "UserGroup" (
     "id" SERIAL NOT NULL,
     "groupName" TEXT NOT NULL,
@@ -137,6 +123,8 @@ CREATE TABLE "resource_ug_map" (
     "id" SERIAL NOT NULL,
     "resource_id" INTEGER NOT NULL,
     "ug_id" INTEGER NOT NULL,
+    "read_op" BOOLEAN NOT NULL,
+    "edit_op" BOOLEAN NOT NULL,
 
     CONSTRAINT "resource_ug_map_pkey" PRIMARY KEY ("id")
 );
@@ -179,15 +167,6 @@ ALTER TABLE "Invite" ADD CONSTRAINT "Invite_organizationId_fkey" FOREIGN KEY ("o
 
 -- AddForeignKey
 ALTER TABLE "OrganizationList" ADD CONSTRAINT "OrganizationList_superadminId_fkey" FOREIGN KEY ("superadminId") REFERENCES "SuperAdminLogin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "UserPolicy" ADD CONSTRAINT "UserPolicy_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "OrganizationList"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "UserPolicy" ADD CONSTRAINT "UserPolicy_usergroupid_fkey" FOREIGN KEY ("usergroupid") REFERENCES "UserGroup"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "UserPolicy" ADD CONSTRAINT "UserPolicy_resourceid_fkey" FOREIGN KEY ("resourceid") REFERENCES "ResourceList"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "UserGroup" ADD CONSTRAINT "UserGroup_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "OrganizationList"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -72,24 +72,9 @@ model OrganizationList {
   users           UserLogin[]
   invites         Invite[]
   userGroups      UserGroup[]
-  userPolicies    UserPolicy[]
   superAdmin      SuperadminToAdminInvite[]
   admin           AdminToUserInvite[]
   resources       ResourceList[]
-}
-
-model UserPolicy {
-  id                Int      @id @default(autoincrement())
-  policyName        String  
-  organizationId    Int
-  organization      OrganizationList @relation(fields: [organizationId], references: [id])
-  usergroupid       Int
-  user_group        UserGroup @relation(fields : [usergroupid] , references : [id])
-  resourceid        Int
-  resource          ResourceList @relation(fields : [resourceid] , references : [id])
-  read_op           Boolean
-  write_op          Boolean
-  delete_op         Boolean
 }
 
 model UserGroup {
@@ -97,7 +82,6 @@ model UserGroup {
   groupName         String
   organizationId    Int
   organization      OrganizationList @relation(fields: [organizationId], references: [id])
-  user_policy        UserPolicy[]
   users             UserLogin[]
   ug_map            resource_ug_map[]
 }
@@ -114,7 +98,6 @@ model ResourceList {
   User              UserLogin @relation(fields: [UserId], references: [id])
   organizationId    Int
   organization      OrganizationList @relation(fields: [organizationId], references: [id])
-  user_policy       UserPolicy[]
   res_map           resource_ug_map[]
 }
 
@@ -157,4 +140,6 @@ model resource_ug_map {
   resources          ResourceList @relation(fields : [resource_id] , references : [id]) 
   ug_id              Int
   user_groups        UserGroup  @relation(fields : [ug_id] , references : [id])
+  read_op           Boolean
+  edit_op          Boolean
 }
