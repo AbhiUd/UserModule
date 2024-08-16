@@ -52,8 +52,8 @@ model UserLogin {
   roleId            Int
   role              Roles @relation(fields : [roleId] , references : [id])
   resources             ResourceList[]
-  usergroupid       Int
-  usergroup         UserGroup @relation(fields : [usergroupid] , references : [id])
+  usergroupid       Int?
+  usergroup         UserGroup? @relation(fields : [usergroupid] , references : [id])
 }
 
 model Invite {

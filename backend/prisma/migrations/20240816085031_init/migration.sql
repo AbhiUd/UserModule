@@ -34,7 +34,7 @@ CREATE TABLE "UserLogin" (
     "mobile_number" TEXT NOT NULL,
     "organizationId" INTEGER NOT NULL,
     "roleId" INTEGER NOT NULL,
-    "usergroupid" INTEGER NOT NULL,
+    "usergroupid" INTEGER,
 
     CONSTRAINT "UserLogin_pkey" PRIMARY KEY ("id")
 );
@@ -161,7 +161,7 @@ ALTER TABLE "UserLogin" ADD CONSTRAINT "UserLogin_organizationId_fkey" FOREIGN K
 ALTER TABLE "UserLogin" ADD CONSTRAINT "UserLogin_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Roles"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserLogin" ADD CONSTRAINT "UserLogin_usergroupid_fkey" FOREIGN KEY ("usergroupid") REFERENCES "UserGroup"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "UserLogin" ADD CONSTRAINT "UserLogin_usergroupid_fkey" FOREIGN KEY ("usergroupid") REFERENCES "UserGroup"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Invite" ADD CONSTRAINT "Invite_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "OrganizationList"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
