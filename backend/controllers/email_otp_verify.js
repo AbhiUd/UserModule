@@ -5,8 +5,8 @@ const prisma = new PrismaClient()
 const verify_otp = async (req , res) => {
 
     const {input_otp} = req.body
-    const {email} = req.params.email
-    const {roleId} = req.params.roleId
+    const {email} = req.params
+    const {roleId} = req.params
 
     try {
         const stored_otp = await prisma.otp_schema.findFirst({
