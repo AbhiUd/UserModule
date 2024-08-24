@@ -58,7 +58,7 @@ const u_create_resource = async (req,res) => {
 
 
 
-const create_resource = async (req,res) => {
+const create_resource = async (req,res ,next) => {
     const {name} = req.body
 
     const obj = req.user
@@ -84,7 +84,7 @@ const create_resource = async (req,res) => {
             return res.status(400).json({message: "Resource not created!!"})
         }
         req.rid = resource.id
-
+        next()
         return res.status(200).json({message: "Resource created successfully"})
 
     }
