@@ -26,7 +26,7 @@ const u_create_resource = async (req,res) => {
         })
         if(!user_group) return res.status(404).json({message: "User Group not found"})
 
-        if(user_group.create_op == 0) return res.status(400).json({message: "You are not allowed to create resource"})
+        if(user_group.create_op == false) return res.status(400).json({message: "You are not allowed to create resource"})
 
 
         if(!name){
@@ -142,7 +142,7 @@ const get_all_resources = async (req,res) => {
 
 
     try{
-        const resources = await prisma.resource_ug_map.findMany({
+        const resources = await prisma.resourceList.findMany({
             where: {
                 organizationId: organizationId
             }
@@ -163,9 +163,65 @@ const get_all_resources = async (req,res) => {
     }
 }
 
+
+const u_get_all_resources = async (req,res) => {
+    const obj = req.user
+
+    if(!obj) return res.json({message: "No auth found"})
+    if(obj.role != User) return res.json({message: "Only User can access this page"})
+    
+    try{
+        const user = await prisma.userLogin.findUnique({
+            where:{
+                id: obj.id
+            }
+        })
+
+        if(!user) return res.status(404).json({message: "User not found"})
+        
+        const user_group = await prisma.userGroup.findUnique({
+            where:{
+                id: user.usergroupid
+            }
+        })
+
+        if(!user_group) return res.status(404).json({message: "User Group not found"})
+
+        const resources = await prisma.resourceList.findMany({
+            where: {
+                organizationId: organizationId,
+                ug_id: user_group.id,
+            }
+        })
+        if(!resources.length()){
+            return res.status(404).json({message:"No organizations found"})
+        }
+        var readable_resources = []
+        for (var key in resources){
+            var resource = resources[key]
+
+            if(resource["read_op"] == true){
+                readable_resources.push(resource)
+            }
+            else if(resource["edit_op"] == true){
+                readable_resources.push(resource)
+            }
+        }
+        console.log(`Resources :\n ${resources.rid}`)
+        
+        return res.status(200).json({resources})
+    }
+    catch(error){
+        console.log(error)
+        return res.status(400).json({message: "Internal Server Error"})
+    }
+}
+
+
 module.exports = {
     create_resource,
     sa_create_resource,
     u_create_resource,
-    get_all_resources
+    get_all_resources,
+    u_get_all_resources
 }

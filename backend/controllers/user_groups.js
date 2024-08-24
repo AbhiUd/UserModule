@@ -29,7 +29,8 @@ const create_user_group = async (req,res) => {
         const user_group = await prisma.userGroup.create({
             data : {
                 groupName,
-                organizationId : verify_organization.id
+                organizationId : verify_organization.id,
+                create_op: false
             }
         })
 

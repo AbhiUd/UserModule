@@ -17,6 +17,7 @@ const admin_verify_email = require("./routes/admin_sigin_verify")
 const user_verify_email = require("./routes/user_signin_verify")
 const assign_user_grp = require("./routes/user_grp_assign_routes")
 const create_res = require("./routes/resource_routes")
+const manage_access = require("./routes/manage_access")
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -37,6 +38,8 @@ app.use("/main",user_verify_email)
 app.use("/main",assign_user_grp)
 app.use("/main",create_res.a_resource_router)
 app.use("/main",create_res.sa_resource_router)
+app.use("/main",create_res.u_resource_router)
+app.use("/main",manage_access.a_manage_router)
 
 // app.get("/getcar", (req, res) => {
 //     res.send(req.cookies);
