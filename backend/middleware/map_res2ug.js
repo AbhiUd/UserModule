@@ -3,8 +3,9 @@ const prisma = new PrismaClient();
 const {User} = require("../utils/roles")
 
 const resource_map = async (req,res) => {
-    const rid = req.rid
+    const r_id = req.rid
     const obj = req.user
+    console.log("Object" ,obj)
 
     try{
         const UserGroups = await prisma.userGroup.findMany({
@@ -15,40 +16,43 @@ const resource_map = async (req,res) => {
         if(!UserGroups) return res.status(400).json({message: "Error in fetching all User Groups"})
 
         
-        for (key in  UserGroups){
+        for (var key in UserGroups){
+            
+            ug_id = UserGroups[key]
+            console.log(ug_id)
             const res_map = await prisma.resource_ug_map.create({
                 data: {
-                    resource_id: rid,
-                    ug_id: key.id,
+                    resource_id: r_id,
+                    ug_id: ug_id["id"],
                     organizationId: obj.organizationId,
                     read_op: false,
                     edit_op: false
                 }
             })
-            if(!res_map) return res.status(400).json({message: "Error in inserting value to table"})
+            // if(!res_map) return res.status(400).json({message: "Error in inserting value to table"})
         }
 
-        if(obj.role == User){
-            const user = await prisma.userLogin.findUnique({
-                where:{
-                    id: obj.id
-                }
-            })
-            if(!user) return res.status(404).json({message: "User not found"})
+        // if(obj.role == User){
+        //     const user = await prisma.userLogin.findUnique({
+        //         where:{
+        //             id: obj.id
+        //         }
+        //     })
+        //     if(!user) return res.status(404).json({message: "User not found"})
 
-            const edit_role_user = await prisma.resource_ug_map.update({
-                where: {
-                    ug_id: user.usergroupid,
-                    resource_id: rid
-                },
-                data:{
-                    edit_op: true
-                }
-            })
-            console.log("Edit access given to User group")
-        }
+        //     const edit_role_user = await prisma.resource_ug_map.update({
+        //         where: {
+        //             ug_id: user.usergroupid,
+        //             resource_id: r_id
+        //         },
+        //         data:{
+        //             edit_op: true
+        //         }
+        //     })
+        //     console.log("Edit access given to User group")
+        // }
         
-        return res.status(200).json({message: "Successfully inserted values"})
+        // return res.status(200).json({message: "Successfully inserted values"})
 
     }
     catch(error){
@@ -57,4 +61,4 @@ const resource_map = async (req,res) => {
     }
 }
 
-module.exports =  resource_map
+module.exports =  {resource_map}
