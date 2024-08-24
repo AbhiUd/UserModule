@@ -1,8 +1,6 @@
 const {PrismaClient} = require("@prisma/client")
 const prisma = new PrismaClient()
 const { Admin } = require("../utils/roles");
-const { compareSync } = require("bcryptjs");
-
 
 
 const assign_user_group = async (req,res) => {
