@@ -91,12 +91,12 @@ model ResourceList {
   id                Int       @id @default(autoincrement())
   name              String    
   author_name       String
-  superAdminId      Int
-  superAdmin        SuperAdminLogin @relation(fields: [superAdminId], references: [id])
-  AdminId           Int
-  Admin             AdminLogin @relation(fields: [AdminId], references: [id])
-  UserId            Int
-  User              UserLogin @relation(fields: [UserId], references: [id])
+  superAdminId      Int?
+  superAdmin        SuperAdminLogin? @relation(fields: [superAdminId], references: [id])
+  AdminId           Int?
+  Admin             AdminLogin? @relation(fields: [AdminId], references: [id])
+  UserId            Int?
+  User              UserLogin? @relation(fields: [UserId], references: [id])
   organizationId    Int
   organization      OrganizationList @relation(fields: [organizationId], references: [id])
   res_map           resource_ug_map[]

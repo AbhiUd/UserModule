@@ -71,9 +71,9 @@ CREATE TABLE "ResourceList" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "author_name" TEXT NOT NULL,
-    "superAdminId" INTEGER NOT NULL,
-    "AdminId" INTEGER NOT NULL,
-    "UserId" INTEGER NOT NULL,
+    "superAdminId" INTEGER,
+    "AdminId" INTEGER,
+    "UserId" INTEGER,
     "organizationId" INTEGER NOT NULL,
 
     CONSTRAINT "ResourceList_pkey" PRIMARY KEY ("id")
@@ -173,13 +173,13 @@ ALTER TABLE "OrganizationList" ADD CONSTRAINT "OrganizationList_superadminId_fke
 ALTER TABLE "UserGroup" ADD CONSTRAINT "UserGroup_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "OrganizationList"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ResourceList" ADD CONSTRAINT "ResourceList_superAdminId_fkey" FOREIGN KEY ("superAdminId") REFERENCES "SuperAdminLogin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "ResourceList" ADD CONSTRAINT "ResourceList_superAdminId_fkey" FOREIGN KEY ("superAdminId") REFERENCES "SuperAdminLogin"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ResourceList" ADD CONSTRAINT "ResourceList_AdminId_fkey" FOREIGN KEY ("AdminId") REFERENCES "AdminLogin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "ResourceList" ADD CONSTRAINT "ResourceList_AdminId_fkey" FOREIGN KEY ("AdminId") REFERENCES "AdminLogin"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ResourceList" ADD CONSTRAINT "ResourceList_UserId_fkey" FOREIGN KEY ("UserId") REFERENCES "UserLogin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "ResourceList" ADD CONSTRAINT "ResourceList_UserId_fkey" FOREIGN KEY ("UserId") REFERENCES "UserLogin"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ResourceList" ADD CONSTRAINT "ResourceList_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "OrganizationList"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
