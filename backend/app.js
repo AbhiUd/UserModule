@@ -15,6 +15,8 @@ const validate_email_router = require("./routes/validate_email");
 const forgot_password_router = require("./routes/forgot_password");
 const admin_verify_email = require("./routes/admin_sigin_verify")
 const user_verify_email = require("./routes/user_signin_verify")
+const assign_user_grp = require("./routes/user_grp_assign_routes")
+const create_res = require("./routes/resource_routes")
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -32,6 +34,9 @@ app.use("/main", forgot_password_router.admin_forgot_router);
 app.use("/main", forgot_password_router.user_forgot_router);
 app.use("/main",admin_verify_email)
 app.use("/main",user_verify_email)
+app.use("/main",assign_user_grp)
+app.use("/main",create_res.a_resource_router)
+app.use("/main",create_res.sa_resource_router)
 
 // app.get("/getcar", (req, res) => {
 //     res.send(req.cookies);
