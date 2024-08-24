@@ -36,6 +36,30 @@ const create_user_group = async (req,res) => {
 
         console.log(`User group created :\n${user_group}`)
 
+        const resources = await prisma.resourceList.findMany({
+            where: {
+                organizationId: organizationId,
+            }
+        })
+        if(!resources.length()){
+            return res.status(404).json({message:"No organizations found"})
+        }
+
+        for (var key in resources){
+            
+            r_id = resources[key]
+            console.log(r_id)
+            const res_map = await prisma.resource_ug_map.create({
+                data: {
+                    resource_id: r_id,
+                    ug_id: user_group.id,
+                    organizationId: verify_organization.id,
+                    read_op: false,
+                    edit_op: false
+                }
+            })
+        }
+
         return res.status(200).json({user_group})
         
     } catch (error) {
