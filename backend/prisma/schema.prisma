@@ -81,7 +81,7 @@ model OrganizationList {
 model UserGroup {
   id                Int      @id @default(autoincrement())
   groupName         String
-  create_op         
+  create_op         Boolean
   organizationId    Int
   organization      OrganizationList @relation(fields: [organizationId], references: [id])
   users             UserLogin[]

@@ -61,6 +61,7 @@ CREATE TABLE "OrganizationList" (
 CREATE TABLE "UserGroup" (
     "id" SERIAL NOT NULL,
     "groupName" TEXT NOT NULL,
+    "create_op" BOOLEAN NOT NULL,
     "organizationId" INTEGER NOT NULL,
 
     CONSTRAINT "UserGroup_pkey" PRIMARY KEY ("id")
