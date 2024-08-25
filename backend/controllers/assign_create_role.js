@@ -13,13 +13,17 @@ const assign_create_role = async (req,res) => {
     try{
         const usergroup = await prisma.userGroup.update({
             where:{
-                usergroupid : parseInt(ug_id)
+                id : parseInt(ug_id),
+                organizationId : obj.organizationId
             },
             data:{
                 create_op: create_policy
             }
         })
+        console.log("data",usergroup)
         if(!usergroup) return res.status(400).json({message: "Error in updating Create policy"})
+
+        return res.status(200).json({message:"Sucessully updated create role"})
     }
     catch(error){
         console.log(error)

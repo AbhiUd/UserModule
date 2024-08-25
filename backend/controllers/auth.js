@@ -19,7 +19,7 @@ const transporter = nodemailer.createTransport({
 
 
 const SignUp = async (req, res) => {
-  const { fname, lname, email, password, mobile_number } = req.body;
+  const { fname, lname, email, password, mobile_number} = req.body;
 
   if (!fname || !lname || !mobile_number || !email || !password) {
     return res.status(400).json({ message: "All fields must be provided." });
@@ -46,7 +46,8 @@ const SignUp = async (req, res) => {
         email: email,
         mobile_number: mobile_number,
         organizationId: Inviteexist.organizationId,
-        roleId: 3,  
+        roleId: 3,
+        status : true  
         // usergroupid: 2
       },
     });

@@ -5,8 +5,8 @@ const create_role_controller = require("../controllers/assign_create_role")
 const {auth_middleware} = require("../middleware/auth")
 const a_manage_router = express.Router()
 
-a_manage_router.put("/admin_signIn/:token/getAllUserGroups/:usergroupid/manage_access_policy",auth_middleware,manage_access_controller.a_manage_access)
-a_manage_router.put("/admin_signIn/:token/getAllUserGroups/:usergroupid/manage_access_policy",auth_middleware,create_role_controller.assign_create_role)
+a_manage_router.put("/admin_signIn/:token/getAllResources/:rid/manage_access_policy",auth_middleware,manage_access_controller.a_manage_access)
+a_manage_router.put("/admin_signIn/:token/getAllUserGroups/:usergroupid/assign_create_role",auth_middleware,create_role_controller.assign_create_role)
 
 module.exports = {
     a_manage_router

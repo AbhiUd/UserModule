@@ -1,6 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-
+const {Admin} = require("../utils/roles")
 
 const a_manage_access = async (req,res) => {
     const manage_access = req.body
@@ -14,10 +14,21 @@ const a_manage_access = async (req,res) => {
         for (var key in manage_access){
             ma = manage_access[key]
             if(ma["policy"]==1){
+                const p_id = await prisma.resource_ug_map.findFirst({
+                    where : {
+                        ug_id: ma["ug_id"],
+                        resource_id: parseInt(resource_id),
+                        organizationId : obj.organizationId
+                    }
+                })
+
+                console.log("id",p_id.id)
                 const res_map = await prisma.resource_ug_map.update({
                     where: {
                         ug_id: ma["ug_id"],
-                        resource_id: resource_id
+                        resource_id: parseInt(resource_id),
+                        id : parseInt(p_id.id),
+                        organizationId : obj.organizationId
                     },
                     data: {
                         read_op: true
@@ -26,10 +37,19 @@ const a_manage_access = async (req,res) => {
                 if(!res_map) return res.status(404).json({message: "Error in updating data of resource_ug_map table"})
             }
             else if(ma["policy"]==2){
+                const p_id = await prisma.resource_ug_map.findFirst({
+                    where : {
+                        ug_id: ma["ug_id"],
+                        resource_id: parseInt(resource_id),
+                        organizationId : obj.organizationId
+                    }
+                })
                 const res_map = await prisma.resource_ug_map.update({
                     where: {
                         ug_id: ma["ug_id"],
-                        resource_id: resource_id
+                        resource_id: parseInt(resource_id),
+                        id : parseInt(p_id.id),
+                        organizationId : obj.organizationId
                     },
                     data: {
                         edit_op: true
@@ -38,10 +58,19 @@ const a_manage_access = async (req,res) => {
                 if(!res_map) return res.status(404).json({message: "Error in updating data of resource_ug_map table"})
             }
             else if(ma["policy"]==0){
+                const p_id = await prisma.resource_ug_map.findFirst({
+                    where : {
+                        ug_id: ma["ug_id"],
+                        resource_id: parseInt(resource_id),
+                        organizationId : obj.organizationId
+                    }
+                })
                 const res_map = await prisma.resource_ug_map.update({
                     where: {
                         ug_id: ma["ug_id"],
-                        resource_id: resource_id
+                        resource_id: parseInt(resource_id),
+                        id : parseInt(p_id.id),
+                        organizationId : obj.organizationId
                     },
                     data: {
                         read_op: false,
