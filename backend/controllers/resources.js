@@ -3,7 +3,7 @@ const { User ,Admin, SuperAdmin } = require("../utils/roles");
 const prisma = new PrismaClient();
 
 
-const u_create_resource = async (req,res) => {
+const u_create_resource = async (req,res,next) => {
     const obj = req.user
     const {name} = req.body
 
@@ -46,7 +46,8 @@ const u_create_resource = async (req,res) => {
             return res.status(400).json({message: "Resource not created!!"})
         }
         req.rid = resource.id
-        return res.status(200).json({message: "Resource created successfully"})
+        next()
+        // return res.status(200).json({message: "Resource created successfully"})
 
     }
     catch(error){
@@ -94,7 +95,7 @@ const create_resource = async (req,res ,next) => {
     }
 }
 
-const sa_create_resource = async (req,res) => {
+const sa_create_resource = async (req,res,next) => {
     const {name} = req.body
     const organizationId = req.params.organizationId
     const obj = req.user
@@ -119,6 +120,7 @@ const sa_create_resource = async (req,res) => {
         }
         req.rid = resource.id
         req.user.organizationId = organizationId
+        next()
         return res.status(200).json({message: "Resource created successfully"})
     }
     catch(error){
@@ -129,6 +131,7 @@ const sa_create_resource = async (req,res) => {
 
 const get_all_resources = async (req,res) => {
     const obj = req.user
+    console.log("auth",obj)
     if(!obj) return res.json({message: "No auth found"})
 
     var organizationId
@@ -144,12 +147,12 @@ const get_all_resources = async (req,res) => {
     try{
         const resources = await prisma.resourceList.findMany({
             where: {
-                organizationId: organizationId
+                organizationId: parseInt(organizationId)
             }
         })
 
-        if(!resources.length()){
-            return res.status(404).json({message:"No organizations found"})
+        if(!resources.length){
+            return res.status(404).json({message:"No Resources found"})
         }
 
         console.log(`Resources :\n ${resources.rid}`)
@@ -187,14 +190,14 @@ const u_get_all_resources = async (req,res) => {
 
         if(!user_group) return res.status(404).json({message: "User Group not found"})
 
-        const resources = await prisma.resourceList.findMany({
+        const resources = await prisma.resource_ug_map.findMany({
             where: {
-                organizationId: organizationId,
+                organizationId: obj.organizationId,
                 ug_id: user_group.id,
             }
         })
-        if(!resources.length()){
-            return res.status(404).json({message:"No organizations found"})
+        if(!resources.length){
+            return res.status(404).json({message:"No Resources found"})
         }
         var readable_resources = []
         for (var key in resources){
@@ -207,9 +210,9 @@ const u_get_all_resources = async (req,res) => {
                 readable_resources.push(resource)
             }
         }
-        console.log(`Resources :\n ${resources.rid}`)
+        // console.log(`Resources :\n ${resources.rid}`)
         
-        return res.status(200).json({resources})
+        return res.status(200).json({readable_resources})
     }
     catch(error){
         console.log(error)
