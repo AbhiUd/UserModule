@@ -11,7 +11,7 @@ sa_resource_router.post("/sa_signin/:token/organizations/organizationId/create_r
 u_resource_router.post("/user_signIn/:token/create_resource",auth_middleware,resource_controller.u_create_resource,resource_map)
 
 a_resource_router.get("/admin_signIn/:token/get_all_resources",auth_middleware,resource_controller.get_all_resources)
-sa_resource_router.get("/sa_signin/:token/organizations/organizationId/get_all_resources",resource_controller.get_all_resources)
+sa_resource_router.get("/sa_signin/:token/organizations/:organizationId/get_all_resources",auth_middleware , resource_controller.get_all_resources)
 u_resource_router.get("/user_signIn/:token/get_all_resources",auth_middleware,resource_controller.u_get_all_resources)
 
 module.exports = {
