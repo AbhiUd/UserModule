@@ -32,6 +32,7 @@ CREATE TABLE "UserLogin" (
     "password" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "mobile_number" TEXT NOT NULL,
+    "status" BOOLEAN NOT NULL,
     "organizationId" INTEGER NOT NULL,
     "roleId" INTEGER NOT NULL,
     "usergroupid" INTEGER,

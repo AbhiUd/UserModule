@@ -47,6 +47,7 @@ model UserLogin {
   password          String
   email             String   @unique
   mobile_number     String
+  status            Boolean
   organizationId    Int
   organization      OrganizationList @relation(fields: [organizationId], references: [id])
   roleId            Int
