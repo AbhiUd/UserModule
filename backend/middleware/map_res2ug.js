@@ -40,10 +40,20 @@ const resource_map = async (req,res) => {
             })
             if(!user) return res.status(404).json({message: "User not found"})
 
+            const p_id = await prisma.resource_ug_map.findFirst({
+                where : {
+                    ug_id: user.usergroupid,
+                    resource_id: parseInt(r_id),
+                    organizationId : obj.organizationId
+                }
+            })
+
             const edit_role_user = await prisma.resource_ug_map.update({
                 where: {
+                    id : parseInt(p_id.id),
                     ug_id: user.usergroupid,
-                    resource_id: r_id
+                    resource_id: parseInt(r_id),
+                    organizationId : obj.organizationId
                 },
                 data:{
                     edit_op: true
@@ -53,6 +63,7 @@ const resource_map = async (req,res) => {
         }
         
         // return res.status(200).json({message: "Successfully inserted values"})
+        return res.status(200).json({message: "Resource created successfully"})
 
     }
     catch(error){
