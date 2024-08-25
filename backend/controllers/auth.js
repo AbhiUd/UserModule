@@ -115,7 +115,8 @@ const SignIn = async (req, res) => {
       return res.status(404).json({ message: "Password Incorrect" });
     }
 
-    // user = user.select("-password");
+    if(!user.status) return res.status(400).json({message: "You are no more a User in this organization"})
+
     user.role = User
     token = generate_token(user);
 
