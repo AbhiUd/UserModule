@@ -38,6 +38,7 @@ model AdminLogin {
   roleId            Int
   role              Roles @relation(fields : [roleId] , references : [id])
   resources             ResourceList[]
+  r_history         ResourceHistory[]
 }
 
 model UserLogin {
@@ -55,6 +56,7 @@ model UserLogin {
   resources             ResourceList[]
   usergroupid       Int?
   usergroup         UserGroup? @relation(fields : [usergroupid] , references : [id])
+  r_history         ResourceHistory[]
 }
 
 model Invite {
@@ -93,6 +95,7 @@ model ResourceList {
   id                Int       @id @default(autoincrement())
   name              String    
   author_name       String
+  data              String
   superAdminId      Int?
   superAdmin        SuperAdminLogin? @relation(fields: [superAdminId], references: [id])
   AdminId           Int?
@@ -102,6 +105,7 @@ model ResourceList {
   organizationId    Int
   organization      OrganizationList @relation(fields: [organizationId], references: [id])
   res_map           resource_ug_map[]
+  r_history         ResourceHistory[]
 }
 
 model SuperadminToAdminInvite {
@@ -147,4 +151,16 @@ model resource_ug_map {
   edit_op           Boolean
   organizationId    Int
   organization      OrganizationList @relation(fields: [organizationId], references: [id])
+}
+
+model ResourceHistory {
+  id                 Int      @id @default(autoincrement())
+  resource_id        Int
+  resource           ResourceList @relation(fields : [resource_id] , references : [id])
+  editedByUser       Int?
+  user               UserLogin?  @relation(fields : [editedByUser] , references : [id])
+  editedByAdmin      Int?
+  admin              AdminLogin?  @relation(fields : [editedByAdmin] , references : [id])
+  editedAt           DateTime
+  changes            Json?
 }
