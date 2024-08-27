@@ -42,7 +42,8 @@ app.use("/main",create_res.a_resource_router)
 app.use("/main",create_res.sa_resource_router)
 app.use("/main",create_res.u_resource_router)
 app.use("/main",manage_access.a_manage_router)
-app.use("/main",deactivate_user.deactivate_user_router)
+app.use("/main",deactivate_user.a_deactivate_user_router)
+app.use("/main",deactivate_user.sa_deactivate_user_router)
 app.use("/main",update_res)
 
 // app.get("/getcar", (req, res) => {
