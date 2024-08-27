@@ -13,12 +13,13 @@ const organization_router = require("./routes/organization");
 const user_grp_router = require("./routes/user_group_routes");
 const validate_email_router = require("./routes/validate_email");
 const forgot_password_router = require("./routes/forgot_password");
-const admin_verify_email = require("./routes/admin_sigin_verify")
-const user_verify_email = require("./routes/user_signin_verify")
+const admin_verify_email = require("./routes/admin_signup_verify")
+const user_verify_email = require("./routes/user_signup_verify")
 const assign_user_grp = require("./routes/user_grp_assign_routes")
 const create_res = require("./routes/resource_routes")
 const manage_access = require("./routes/manage_access")
 const deactivate_user = require("./routes/deactivate_user")
+const update_res = require("./routes/update_resource_routing")
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -42,6 +43,7 @@ app.use("/main",create_res.sa_resource_router)
 app.use("/main",create_res.u_resource_router)
 app.use("/main",manage_access.a_manage_router)
 app.use("/main",deactivate_user.deactivate_user_router)
+app.use("/main",update_res)
 
 // app.get("/getcar", (req, res) => {
 //     res.send(req.cookies);

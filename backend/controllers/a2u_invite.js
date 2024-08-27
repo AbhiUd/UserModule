@@ -39,6 +39,17 @@ const create_user_invite = async (req, res , next) => {
             return res.status(400).json({ message: "Provide an email id for invite" });
         }
 
+        const check_a = await prisma.adminToUserInvite.findUnique({
+            where : {
+                email : email
+            }
+        })
+
+        if(check_a){
+            return res.status(404).json({message : "This email id is already in use for superadmin"})
+        }
+
+
         const inviteEmail = await prisma.adminToUserInvite.create({        
             data : {
                 email,

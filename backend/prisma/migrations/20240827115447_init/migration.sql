@@ -73,6 +73,7 @@ CREATE TABLE "ResourceList" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "author_name" TEXT NOT NULL,
+    "data" TEXT NOT NULL,
     "superAdminId" INTEGER,
     "AdminId" INTEGER,
     "UserId" INTEGER,
@@ -130,6 +131,18 @@ CREATE TABLE "resource_ug_map" (
     "organizationId" INTEGER NOT NULL,
 
     CONSTRAINT "resource_ug_map_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ResourceHistory" (
+    "id" SERIAL NOT NULL,
+    "resource_id" INTEGER NOT NULL,
+    "editedByUser" INTEGER,
+    "editedByAdmin" INTEGER,
+    "editedAt" TIMESTAMP(3) NOT NULL,
+    "changes" JSONB,
+
+    CONSTRAINT "ResourceHistory_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -206,3 +219,12 @@ ALTER TABLE "resource_ug_map" ADD CONSTRAINT "resource_ug_map_ug_id_fkey" FOREIG
 
 -- AddForeignKey
 ALTER TABLE "resource_ug_map" ADD CONSTRAINT "resource_ug_map_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "OrganizationList"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ResourceHistory" ADD CONSTRAINT "ResourceHistory_resource_id_fkey" FOREIGN KEY ("resource_id") REFERENCES "ResourceList"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ResourceHistory" ADD CONSTRAINT "ResourceHistory_editedByUser_fkey" FOREIGN KEY ("editedByUser") REFERENCES "UserLogin"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ResourceHistory" ADD CONSTRAINT "ResourceHistory_editedByAdmin_fkey" FOREIGN KEY ("editedByAdmin") REFERENCES "AdminLogin"("id") ON DELETE SET NULL ON UPDATE CASCADE;

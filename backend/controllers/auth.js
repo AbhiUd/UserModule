@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 const bcrypt = require("bcryptjs");
 const { generate_token } = require("../utils/generateToken");
 const {User} = require("../utils/roles")
-
+const schedule = require("node-schedule")
 const otp_generator = require("otp-generator")
 
 const nodemailer = require("nodemailer")
@@ -97,6 +97,42 @@ const SignUp = async (req, res) => {
         return res.status(200).json({ message: "Invite sent successfully" });
       }
     });
+
+    const job = schedule.scheduleJob('5 * * * * *',async(req,res) =>{
+      try {
+        const expired_otp = await prisma.otp_schema.findUnique({
+          where : {
+            id : save_otp.id,
+            email : email,
+            expiresAt : {
+              lt : new Date()
+            }
+          }
+        })
+        // for(var key in expired_otp){
+        //   e_id = expired_otp[key]
+        // }
+
+        if(expired_otp){
+          await prisma.otp_schema.delete({
+            where : {
+              id : save_otp.id
+            }
+          })
+
+          await prisma.userLogin.delete({
+            where: {
+              email: email,
+            },
+          });
+          console.log("Deleted credentials after expiry")
+        }
+        }
+    
+      catch (error) {
+        console.log(error)
+      }
+    })
 
     return res.status(201).json({ message: "User created successfully", user });
   } catch (error) {

@@ -10,15 +10,17 @@ const deactivate = async (req,res) => {
     if(obj.role != Admin) return res.json({message: "Only admin can access this page"})
 
     try{
-        const user = prisma.userLogin.update({
+        const user = await prisma.userLogin.update({
             where:{
-                id: parseInt(id),
+                id: id,
                 organizationId: obj.organizationId
             },
             data:{
                 status: false
             }
         })
+
+        console.log(user)
         if(!user) return res.status(404).json({message: "User not found"})
 
         return res.status(200).json({message: "User de-activated successfully"})
