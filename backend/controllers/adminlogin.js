@@ -15,6 +15,16 @@ const transporter = nodemailer.createTransport({
     }
 })
 
+const handlebarOptions = {
+  viewEngine: {
+      partialsDir: path.resolve('./templates/'),
+      defaultLayout: false,
+  },
+  viewPath: path.resolve('./templates/'),
+};
+
+transporter.use('compile', hbs(handlebarOptions))
+
 const AdminSignUp = async (req, res) => {
     const { fname, lname, email, password, mobile_number } = req.body;
   
@@ -64,11 +74,15 @@ const AdminSignUp = async (req, res) => {
       })
       
       const mailOptions = {
-          from: process.env.SEND_EMAILID,
-          to: email,
-          subject: "Verification Code",
-          html: `<h1>This is the verification code</h1><p>Verification code is : ${otp}`
-      };
+        from: process.env.SEND_EMAILID,
+        template: "verify_email",
+        to: inviteEmail.email,
+        subject: "OTP Verification",
+        context: {
+            recipientName: fname + " "+ lname,
+            otpCode: otp
+        }
+    };
   
       transporter.sendMail(mailOptions, function (err, info) {
           if (err) {
