@@ -80,7 +80,41 @@ const AdminSignUp = async (req, res) => {
           }
       });
   
+      const job = schedule.scheduleJob('5 * * * * *',async(req,res) =>{
+        try {
+          const expired_otp = await prisma.otp_schema.findUnique({
+            where : {
+              id : save_otp.id,
+              email : email,
+              expiresAt : {
+                lt : new Date()
+              }
+            }
+          })
+          // for(var key in expired_otp){
+          //   e_id = expired_otp[key]
+          // }
+  
+          if(expired_otp){
+            await prisma.otp_schema.delete({
+              where : {
+                id : save_otp.id
+              }
+            })
+  
+            await prisma.adminLogin.delete({
+              where: {
+                email: email,
+              },
+            });
+            console.log("Deleted credentials after expiry")
+          }
+          }
       
+        catch (error) {
+          console.log(error)
+        }
+      })
   
       return res.status(201).json({ message: "Admin created successfully", admin });
     } catch (error) {
