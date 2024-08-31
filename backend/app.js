@@ -44,7 +44,8 @@ app.use("/main",create_res.u_resource_router)
 app.use("/main",manage_access.a_manage_router)
 app.use("/main",deactivate_user.a_deactivate_user_router)
 app.use("/main",deactivate_user.sa_deactivate_user_router)
-app.use("/main",update_res)
+app.use("/main",update_res.update_router)
+app.use("/main",update_res.a_update_router)
 
 // app.get("/getcar", (req, res) => {
 //     res.send(req.cookies);
