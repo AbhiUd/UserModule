@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 
 const u_create_resource = async (req,res,next) => {
     const obj = req.user
-    const {name} = req.body
+    const {name,data} = req.body
 
     if(!obj) return res.json({message: "No auth found"})
     if(obj.role != User) return res.json({message: "Only User can access this page"})
@@ -38,7 +38,8 @@ const u_create_resource = async (req,res,next) => {
                 name: name,
                 author_name: obj.fname + " " + obj.lname,
                 UserId: obj.id,
-                organizationId: obj.organizationId
+                organizationId: obj.organizationId,
+                data : data
             }
         })
 
@@ -60,7 +61,7 @@ const u_create_resource = async (req,res,next) => {
 
 
 const create_resource = async (req,res ,next) => {
-    const {name} = req.body
+    const {name,data} = req.body
 
     const obj = req.user
 
@@ -77,7 +78,8 @@ const create_resource = async (req,res ,next) => {
                 name: name,
                 author_name: obj.fname + " " + obj.lname,
                 AdminId: obj.id,
-                organizationId: obj.organizationId
+                organizationId: obj.organizationId,
+                data : data
             }
         })
 
@@ -86,7 +88,7 @@ const create_resource = async (req,res ,next) => {
         }
         req.rid = resource.id
         next()
-        return res.status(200).json({message: "Resource created successfully"})
+        // return res.status(200).json({message: "Resource created successfully"})
 
     }
     catch(error){
@@ -96,7 +98,7 @@ const create_resource = async (req,res ,next) => {
 }
 
 const sa_create_resource = async (req,res,next) => {
-    const {name} = req.body
+    const {name,data} = req.body
     const organizationId = req.params.organizationId
     const obj = req.user
     
@@ -112,7 +114,8 @@ const sa_create_resource = async (req,res,next) => {
                 name: name,
                 author_name: obj.fname + " " + obj.lname,
                 superAdminId: obj.id,
-                organizationId: organizationId
+                organizationId: organizationId,
+                data : data
             }
         })
         if(!resource){
