@@ -4,7 +4,10 @@ const bcrypt = require("bcryptjs");
 const { generate_token } = require("../utils/generateToken");
 const {Admin} = require("../utils/roles")
 const otp_generator = require("otp-generator")
+const hbs = require('nodemailer-express-handlebars')
+const path = require("path")
 const nodemailer = require("nodemailer")
+const schedule = require("node-schedule")
 require("dotenv").config()
 
 const transporter = nodemailer.createTransport({
@@ -76,7 +79,7 @@ const AdminSignUp = async (req, res) => {
       const mailOptions = {
         from: process.env.SEND_EMAILID,
         template: "verify_email",
-        to: inviteEmail.email,
+        to: email,
         subject: "OTP Verification",
         context: {
             recipientName: fname + " "+ lname,
