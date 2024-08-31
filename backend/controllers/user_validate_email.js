@@ -2,6 +2,9 @@ const {PrismaClient} = require("@prisma/client")
 const prisma = new PrismaClient()
 const {reset_token} = require("../utils/generateToken");
 const nodemailer = require("nodemailer")
+const hbs = require('nodemailer-express-handlebars')
+const path = require('path')
+
 require("dotenv").config()
 
 const transporter = nodemailer.createTransport({
@@ -12,6 +15,16 @@ const transporter = nodemailer.createTransport({
     }
 })
 
+const handlebarOptions = {
+    viewEngine: {
+        partialsDir: path.resolve('./templates/'),
+        defaultLayout: false,
+    },
+    viewPath: path.resolve('./templates/'),
+};
+
+transporter.use('compile', hbs(handlebarOptions))
+
 const validate_email = async(req,res) => {
     const {email} = req.body
     
@@ -19,6 +32,12 @@ const validate_email = async(req,res) => {
         const check_email = await prisma.userLogin.findUnique({
             where : {
                 email : email
+            }
+        })
+
+        const organization_name = await prisma.organizationList.findUnique({
+            where : {
+                id : check_email.organizationId
             }
         })
 
@@ -35,9 +54,15 @@ const validate_email = async(req,res) => {
         console.log(r_token)
         const mailOptions = {
             from: process.env.SEND_EMAILID,
+            template : "forgot_password",
             to: check_email.email,
             subject: "Reset Password",
-            html: '<h1>Click on </h1><a href = "http://localhost:5000/main/user_signIn/reset_password/'+r_token+'">Reset password</a>'
+            context: {
+                name: check_email.fname+" "+check_email.lname,
+                resetLink: '<h1>Click on </h1><a href = "http://localhost:5000/main/user_signIn/reset_password/'+r_token+'">Reset password</a>',
+                companyName: organization_name.name
+            }
+            // html: '<h1>Click on </h1><a href = "http://localhost:5000/main/user_signIn/reset_password/'+r_token+'">Reset password</a>'
         };
 
         transporter.sendMail(mailOptions, function (err) {
