@@ -40,7 +40,7 @@ const create_admin_invite = async (req ,res) => {
             return res.status(400).json({ message: "Provide an email id or organizationId for invite" });
         }
 
-        const check_sa = await prisma.superadminToAdminInvite.findUnique({
+        const check_sa = await prisma.superAdminLogin.findUnique({
             where : {
                 email : email
             }
