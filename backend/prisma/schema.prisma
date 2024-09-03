@@ -106,6 +106,7 @@ model ResourceList {
   organization      OrganizationList @relation(fields: [organizationId], references: [id])
   res_map           resource_ug_map[]
   r_history         ResourceHistory[]
+  secure            Boolean
 }
 
 model SuperadminToAdminInvite {
@@ -162,5 +163,5 @@ model ResourceHistory {
   editedByAdmin      Int?
   admin              AdminLogin?  @relation(fields : [editedByAdmin] , references : [id])
   editedAt           DateTime
-  changes            Json?
+  changes            String?
 }

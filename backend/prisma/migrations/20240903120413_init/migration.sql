@@ -78,6 +78,7 @@ CREATE TABLE "ResourceList" (
     "AdminId" INTEGER,
     "UserId" INTEGER,
     "organizationId" INTEGER NOT NULL,
+    "secure" BOOLEAN NOT NULL,
 
     CONSTRAINT "ResourceList_pkey" PRIMARY KEY ("id")
 );
@@ -140,7 +141,7 @@ CREATE TABLE "ResourceHistory" (
     "editedByUser" INTEGER,
     "editedByAdmin" INTEGER,
     "editedAt" TIMESTAMP(3) NOT NULL,
-    "changes" JSONB,
+    "changes" TEXT,
 
     CONSTRAINT "ResourceHistory_pkey" PRIMARY KEY ("id")
 );
