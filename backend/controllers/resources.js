@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 
 const u_create_resource = async (req,res,next) => {
     const obj = req.user
-    const {name,data} = req.body
+    const {name,data,secure} = req.body
 
     if(!obj) return res.json({message: "No auth found"})
     if(obj.role != User) return res.json({message: "Only User can access this page"})
@@ -39,7 +39,8 @@ const u_create_resource = async (req,res,next) => {
                 author_name: obj.fname + " " + obj.lname,
                 UserId: obj.id,
                 organizationId: obj.organizationId,
-                data : data
+                data : data,
+                secure: secure
             }
         })
 
@@ -79,7 +80,8 @@ const create_resource = async (req,res ,next) => {
                 author_name: obj.fname + " " + obj.lname,
                 AdminId: obj.id,
                 organizationId: obj.organizationId,
-                data : data
+                data : data,
+                secure:false
             }
         })
 
@@ -115,7 +117,8 @@ const sa_create_resource = async (req,res,next) => {
                 author_name: obj.fname + " " + obj.lname,
                 superAdminId: obj.id,
                 organizationId: organizationId,
-                data : data
+                data : data,
+                secure:false
             }
         })
         if(!resource){
@@ -205,12 +208,27 @@ const u_get_all_resources = async (req,res) => {
         var readable_resources = []
         for (var key in resources){
             var resource = resources[key]
-
-            if(resource["read_op"] == true){
-                readable_resources.push(resource)
+            const check_secure = await prisma.resourceList.findFirst({
+                where:{
+                    id: parseInt(resource["resource_id"]),
+                    secure: true
+                }
+            })
+            if(check_secure && check_secure.UserId == obj.id){
+                if(resource["read_op"] == true){
+                    readable_resources.push(resource)
+                }
+                else if(resource["edit_op"] == true){
+                    readable_resources.push(resource)   
+                }
             }
-            else if(resource["edit_op"] == true){
-                readable_resources.push(resource)
+            else if(!check_secure){
+                if(resource["read_op"] == true){
+                    readable_resources.push(resource)
+                }
+                else if(resource["edit_op"] == true){
+                    readable_resources.push(resource)
+                }
             }
         }
         // console.log(`Resources :\n ${resources.rid}`)
