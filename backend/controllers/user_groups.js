@@ -42,7 +42,7 @@ const create_user_group = async (req,res) => {
             }
         })
         if(!resources.length){
-            return res.status(404).json({message:"No Resources found"})
+            return res.status(200).json({message:"No Resources to map"})
         }
 
         for (var key in resources){
